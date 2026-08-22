@@ -17,11 +17,10 @@
         .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
         .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
         
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; user-select: none; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
         .card:active { background: #21262d; border-color: #a259ff; }
         
-        .card.locked { opacity: 0.3; filter: grayscale(1); cursor: not-allowed; }
-        .card.locked:active { background: #161b22; border-color: #30363d; }
+        .card.locked { opacity: 0.35; filter: grayscale(1); }
 
         .card-info { flex: 1; pointer-events: none; }
         .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
@@ -52,29 +51,19 @@
 
     <div class="top-bar">
         <div class="title">HIHI MXT</div>
-        <button class="admin-btn" id="openAdminBtn">⚙️ Admin Panel</button>
-    </div>
-
-    <!-- MODAL NHẬP MẬT KHẨU ADMIN -->
-    <div id="loginAdminModal" class="custom-modal">
-        <div class="modal-box">
-            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 10px;">🔐 Đăng Nhập Admin</div>
-            <input type="password" id="adminPassInput" class="input-box" placeholder="Nhập mật khẩu quản trị...">
-            <button class="btn-check" id="confirmAdminBtn">Xác Nhận</button>
-            <button class="btn-close" style="width: 100%; padding: 10px;" id="cancelAdminBtn">Huỷ Bỏ</button>
-        </div>
+        <button class="admin-btn" onclick="moBangAdmin()">⚙️ Admin Panel</button>
     </div>
 
     <!-- KHU VỰC QUẢN TRỊ ADMIN -->
     <div id="adminPanel">
         <div class="admin-header">
             <div style="font-size: 15px; font-weight: bold; color: #a259ff;">🛠️ Bảng Quản Trị Admin</div>
-            <button class="btn-close" id="closeAdminPanelBtn">Đóng</button>
+            <button class="btn-close" onclick="dongBangAdmin()">Đóng</button>
         </div>
         
         <div style="font-size: 13px; color: #c9d1d9; margin-bottom: 6px;">Cập nhật thông báo trang chủ:</div>
         <input type="text" class="input-box" id="announcementInput" placeholder="Nhập thông báo mới...">
-        <button class="btn-check" style="margin-bottom: 10px;" id="updateDescBtn">Đổi Thông Báo</button>
+        <button class="btn-check" style="margin-bottom: 10px;" onclick="doiThongBao()">Đổi Thông Báo</button>
 
         <div class="admin-divider"></div>
 
@@ -86,7 +75,7 @@
             <option value="BOTH">Cấp cả PRO & PLUS</option>
             <option value="RESET">Hạ về FREE (Thu hồi toàn bộ)</option>
         </select>
-        <button class="btn-check" id="grantPermissionBtn">Xác Nhận Cấp Quyền</button>
+        <button class="btn-check" onclick="capQuyenTaiKhoan()">Xác Nhận Cấp Quyền</button>
 
         <div style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 10px;">Trạng thái hiện tại: <span id="currentStatusBadge" style="color: #238636; font-weight: bold;">FREE</span></div>
     </div>
@@ -96,34 +85,34 @@
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
-        <button class="btn-check" id="checkTokenBtn">Check Ngay</button>
+        <button class="btn-check" onclick="checkToken()">Check Ngay</button>
     </div>
 
     <!-- DANH SÁCH CHỨC NĂNG -->
     <div class="section-title">Phổ Biến <span>2</span></div>
-    <div class="card pro-feature locked" data-name="Ban 7 Ngày" data-type="PRO"><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" data-name="Tiểu Sử Dài" data-type="PRO"><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Ban 7 Ngày', 'PRO')"><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Tiểu Sử Dài', 'PRO')"><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Quản Lý Token <span>4</span></div>
-    <div class="card pro-feature locked" data-name="Vô Hiệu Hoá Access Token" data-type="PRO"><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" data-name="EAT → Access Token" data-type="PRO"><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" data-name="EAT → JWT Token" data-type="PRO"><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></div>
-    <div class="card" data-name="Access Token → JWT Token" data-type="FREE"><div class="card-info"><div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div><div class="card-desc">Chuyển đổi Access Token sang JWT Token</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Vô Hiệu Hoá Access Token', 'PRO')"><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('EAT → Access Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('EAT → JWT Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Access Token → JWT Token', 'FREE')"><div class="card-info"><div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div><div class="card-desc">Chuyển đổi Access Token sang JWT Token</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Quản Lý Email <span>4</span></div>
-    <div class="card pro-feature locked" data-name="Thêm Email Khôi Phục" data-type="PRO_EMAIL"><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" data-name="Huỷ Yêu Cầu Gắn Email" data-type="PRO"><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></div>
-    <div class="card" data-name="Huỷ Liên Kết Email" data-type="FREE"><div class="card-info"><div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div><div class="card-desc">Gỡ email liên kết khỏi tài khoản</div></div><div class="arrow">›</div></div>
-    <div class="card" data-name="Đổi Email Liên Kết" data-type="FREE"><div class="card-info"><div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div><div class="card-desc">Thay đổi email liên kết của bạn</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Thêm Email Khôi Phục', 'PRO_EMAIL')"><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Huỷ Yêu Cầu Gắn Email', 'PRO')"><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Huỷ Liên Kết Email', 'FREE')"><div class="card-info"><div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div><div class="card-desc">Gỡ email liên kết khỏi tài khoản</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Đổi Email Liên Kết', 'FREE')"><div class="card-info"><div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div><div class="card-desc">Thay đổi email liên kết của bạn</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Bảo Mật Garena <span>2</span></div>
-    <div class="card pro-feature locked" data-name="Dò Mã Bảo Mật" data-type="BRUTE"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" data-name="Ban Vĩnh Viễn" data-type="PRO"><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Ban Vĩnh Viễn', 'PRO')"><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
-    <div class="card pro-feature locked" data-name="Spam Log" data-type="PRO"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
-    <div class="card plus-feature locked" data-name="Chặn Mail Xác Thực (OTP)" data-type="OTP"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
-    <div class="card plus-feature locked" data-name="Đăng Xuất Mọi Thiết Bị" data-type="PLUS"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Spam Log', 'PRO')"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
+    <div class="card plus-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'OTP')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
+    <div class="card plus-feature locked" onclick="dungChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
 
     <!-- Modal Dò Mã -->
     <div id="bruteModal" class="custom-modal">
@@ -131,7 +120,7 @@
             <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang dò mã bảo mật mail xác thực</div>
             <div style="font-size: 11px; color: #8b949e;">Hệ thống đang quét từ 000000 đến 999999...</div>
             <div class="brute-code" id="bruteNumber">000000</div>
-            <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" id="cancelBruteBtn">Huỷ Quét</button>
+            <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" onclick="huyDoMa()">Huỷ Quét</button>
         </div>
     </div>
 
@@ -149,38 +138,22 @@
             setTimeout(() => t.style.display = 'none', 3000);
         }
 
-        document.getElementById('checkTokenBtn').addEventListener('click', function() {
-            let val = document.getElementById('tokenInput').value.trim();
-            if(val === "") hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
-            else hienToast("Đang kết nối hệ thống kiểm tra...");
-        });
-
-        document.getElementById('openAdminBtn').addEventListener('click', function() {
-            document.getElementById('loginAdminModal').style.display = 'flex';
-            document.getElementById('adminPassInput').value = "";
-        });
-
-        document.getElementById('confirmAdminBtn').addEventListener('click', function() {
-            let matKhau = document.getElementById('adminPassInput').value;
-            if (matKhau === "Maiyeuvu12345") {
-                document.getElementById('loginAdminModal').style.display = 'none';
+        function moBangAdmin() {
+            let pass = prompt("🔐 Nhập mật khẩu quản trị Admin:");
+            if (pass === "Maiyeuvu12345") {
                 document.getElementById('adminPanel').style.display = 'block';
                 hienToast("Đăng nhập Admin thành công!");
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                hienToast("Mật khẩu Admin không đúng!");
+            } else if (pass !== null) {
+                hienToast("❌ Mật khẩu Admin không đúng!");
             }
-        });
+        }
 
-        document.getElementById('cancelAdminBtn').addEventListener('click', function() {
-            document.getElementById('loginAdminModal').style.display = 'none';
-        });
-
-        document.getElementById('closeAdminPanelBtn').addEventListener('click', function() {
+        function dongBangAdmin() {
             document.getElementById('adminPanel').style.display = 'none';
-        });
+        }
 
-        document.getElementById('updateDescBtn').addEventListener('click', function() {
+        function doiThongBao() {
             let text = document.getElementById('announcementInput').value.trim();
             if(text !== "") {
                 document.getElementById('mainDesc').innerText = text;
@@ -188,42 +161,43 @@
             } else {
                 hienToast("Vui lòng nhập nội dung thông báo mới!");
             }
-        });
+        }
 
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('click', function() {
-                let tenChucNang = this.getAttribute('data-name');
-                let loaiYeuCau = this.getAttribute('data-type');
+        function checkToken() {
+            let val = document.getElementById('tokenInput').value.trim();
+            if(val === "") hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
+            else hienToast("Đang kết nối hệ thống kiểm tra...");
+        }
 
-                if (loaiYeuCau === 'PRO' || loaiYeuCau === 'PRO_EMAIL' || loaiYeuCau === 'BRUTE') {
-                    if (!hasPro) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PRO!"); return; }
-                }
-                if (loaiYeuCau === 'PLUS') {
-                    if (!hasPlus) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!"); return; }
-                }
+        function dungChucNang(tenChucNang, loaiYeuCau) {
+            if (loaiYeuCau === 'PRO' || loaiYeuCau === 'PRO_EMAIL' || loaiYeuCau === 'BRUTE') {
+                if (!hasPro) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PRO!"); return; }
+            }
+            if (loaiYeuCau === 'PLUS') {
+                if (!hasPlus) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!"); return; }
+            }
 
-                if (loaiYeuCau === 'BRUTE') {
-                    chayDoMaBaoMat();
-                    return;
-                }
-                if (loaiYeuCau === 'PRO_EMAIL') {
-                    xuLyThemEmail3Buoc();
-                    return;
-                }
-                if (loaiYeuCau === 'OTP') {
-                    xuLyChanOtp();
-                    return;
-                }
+            if (loaiYeuCau === 'BRUTE') {
+                chayDoMaBaoMat();
+                return;
+            }
+            if (loaiYeuCau === 'PRO_EMAIL') {
+                xuLyThemEmail3Buoc();
+                return;
+            }
+            if (loaiYeuCau === 'OTP') {
+                xuLyChanOtp();
+                return;
+            }
 
-                let userToken = prompt("Vui lòng nhập UID hoặc Token để sử dụng [" + tenChucNang + "]:");
-                if (userToken !== null && userToken.trim() !== "") {
-                    hienToast("Đang xử lý " + tenChucNang + "...");
-                    setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
-                } else if (userToken !== null) {
-                    hienToast("Bạn chưa nhập Token/UID!");
-                }
-            });
-        });
+            let userToken = prompt("Vui lòng nhập UID hoặc Token để sử dụng [" + tenChucNang + "]:");
+            if (userToken !== null && userToken.trim() !== "") {
+                hienToast("Đang xử lý " + tenChucNang + "...");
+                setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
+            } else if (userToken !== null) {
+                hienToast("Bạn chưa nhập Token/UID!");
+            }
+        }
 
         function xuLyThemEmail3Buoc() {
             let token = prompt("[Bước 1/3] Nhập UID hoặc Token tài khoản:");
@@ -277,16 +251,54 @@
             }
         }
 
-        document.getElementById('cancelBruteBtn').addEventListener('click', function() {
+        function huyDoMa() {
             clearInterval(bruteInterval);
             document.getElementById('bruteModal').style.display = 'none';
             hienToast("Đã huỷ quá trình dò mã!");
-        });
+        }
 
-        document.getElementById('grantPermissionBtn').addEventListener('click', function() {
+        function capQuyenTaiKhoan() {
             let user = document.getElementById('targetUser').value.trim();
             let pkg = document.getElementById('packageType').value;
             
             if(user !== "") {
                 let proElements = document.querySelectorAll('.pro-feature');
                 let plusElements = document.querySelectorAll('.plus-feature');
+
+                hasPro = false;
+                hasPlus = false;
+                proElements.forEach(el => el.classList.add('locked'));
+                plusElements.forEach(el => el.classList.add('locked'));
+
+                if (pkg === 'PRO') {
+                    hasPro = true;
+                    proElements.forEach(el => el.classList.remove('locked'));
+                    hienToast("⚡ Đã cấp riêng Gói PRO cho: " + user);
+                } else if (pkg === 'PLUS') {
+                    hasPlus = true;
+                    plusElements.forEach(el => el.classList.remove('locked'));
+                    hienToast("⚡ Đã cấp riêng Gói PLUS cho: " + user);
+                } else if (pkg === 'BOTH') {
+                    hasPro = true;
+                    hasPlus = true;
+                    proElements.forEach(el => el.classList.remove('locked'));
+                    plusElements.forEach(el => el.classList.remove('locked'));
+                    hienToast("⚡ Đã cấp cả PRO & PLUS cho: " + user);
+                } else if (pkg === 'RESET') {
+                    hienToast("🔒 Đã hạ tài khoản về FREE (Thu hồi toàn bộ quyền)");
+                }
+
+                let currentText = "FREE";
+                if (hasPro && hasPlus) currentText = "PRO & PLUS";
+                else if (hasPro) currentText = "PRO";
+                else if (hasPlus) currentText = "PLUS";
+
+                document.getElementById('currentStatusBadge').innerText = currentText;
+                document.getElementById('targetUser').value = "";
+            } else {
+                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
+            }
+        }
+    </script>
+</body>
+</html>
