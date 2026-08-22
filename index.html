@@ -3,74 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIHI MXT - Fix Tối Đa</title>
-    <style>
-        body { background-color: #0d0f18; color: #fff; padding: 15px; font-family: sans-serif; text-align: center; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 15px; margin-bottom: 10px; text-align: left; cursor: pointer; }
-        .admin-btn { background: #21262d; border: 1px solid #30363d; color: #a259ff; padding: 10px; border-radius: 6px; font-weight: bold; width: 100%; margin-bottom: 15px; cursor: pointer; }
-        #adminPanel { display: none; background: #161b22; border: 1px solid #a259ff; padding: 15px; border-radius: 10px; text-align: left; margin-bottom: 15px; }
-        input, button { width: 100%; padding: 10px; margin-bottom: 10px; background: #0d0f18; color: #fff; border: 1px solid #30363d; border-radius: 6px; }
-        .btn-main { background: #a259ff; font-weight: bold; border: none; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <button class="admin-btn" onclick="moAdmin()">⚙️ Bấm Vào Đây Để Mở Admin Panel</button>
-
-    <div id="adminPanel">
-        <h3>Bảng Admin</h3>
-        <p>Mật khẩu đúng là: <b>Maiyeuvu12345</b></p>
-        <input type="password" id="p" placeholder="Nhập mật khẩu...">
-        <button class="btn-main" onclick="checkAdmin()">Xác Nhận Đăng Nhập</button>
-        <button onclick="dongAdmin()" style="background:#da3633; border:none; color:#fff;">Đóng</button>
-    </div>
-
-    <h3>Danh Sách Chức Năng</h3>
-    <div class="card" onclick="dungChucNang('Access Token → JWT Token')">
-        <b>Access Token → JWT Token (FREE)</b>
-        <p style="font-size:11px; color:#aaa;">Bấm vào đây để test chức năng</p>
-    </div>
-
-    <div class="card" onclick="dungChucNang('Huỷ Liên Kết Email')">
-        <b>Huỷ Liên Kết Email (FREE)</b>
-        <p style="font-size:11px; color:#aaa;">Bấm vào đây để test chức năng</p>
-    </div>
-
-    <script>
-        function moAdmin() {
-            let panel = document.getElementById('adminPanel');
-            panel.style.display = 'block';
-            alert("Đã bấm mở bảng Admin!");
-        }
-
-        function dongAdmin() {
-            document.getElementById('adminPanel').style.display = 'none';
-        }
-
-        function checkAdmin() {
-            let val = document.getElementById('p').value;
-            if (val === "Maiyeuvu12345") {
-                alert("🎉 Đăng nhập Admin thành công!");
-            } else {
-                alert("❌ Sai mật khẩu!");
-            }
-        }
-
-        function dungChucNang(ten) {
-            let token = prompt("Nhập Token/UID để chạy [" + ten + "]:");
-            if (token) {
-                alert("✅ Đã thực thi thành công: " + ten);
-            } else {
-                alert("Bạn chưa nhập token!");
-            }
-        }
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HIHI MXT - Nền Tảng Công Cụ Hoàn Chỉnh</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
@@ -217,14 +149,12 @@
             setTimeout(() => t.style.display = 'none', 3000);
         }
 
-        // Gắn sự kiện cho nút Check
         document.getElementById('checkTokenBtn').addEventListener('click', function() {
             let val = document.getElementById('tokenInput').value.trim();
             if(val === "") hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
             else hienToast("Đang kết nối hệ thống kiểm tra...");
         });
 
-        // Gắn sự kiện mở/đóng Admin Panel
         document.getElementById('openAdminBtn').addEventListener('click', function() {
             document.getElementById('loginAdminModal').style.display = 'flex';
             document.getElementById('adminPassInput').value = "";
@@ -260,13 +190,11 @@
             }
         });
 
-        // Xử lý click toàn bộ các thẻ chức năng bằng Event Delegation siêu nhạy
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', function() {
                 let tenChucNang = this.getAttribute('data-name');
                 let loaiYeuCau = this.getAttribute('data-type');
 
-                // Kiểm tra khóa Pro/Plus
                 if (loaiYeuCau === 'PRO' || loaiYeuCau === 'PRO_EMAIL' || loaiYeuCau === 'BRUTE') {
                     if (!hasPro) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PRO!"); return; }
                 }
@@ -274,7 +202,6 @@
                     if (!hasPlus) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!"); return; }
                 }
 
-                // Thực thi các tính năng đặc biệt
                 if (loaiYeuCau === 'BRUTE') {
                     chayDoMaBaoMat();
                     return;
@@ -288,7 +215,6 @@
                     return;
                 }
 
-                // Các chức năng thông thường (FREE, PRO, PLUS tiêu chuẩn) bắt buộc nhập Token/UID
                 let userToken = prompt("Vui lòng nhập UID hoặc Token để sử dụng [" + tenChucNang + "]:");
                 if (userToken !== null && userToken.trim() !== "") {
                     hienToast("Đang xử lý " + tenChucNang + "...");
@@ -357,4 +283,10 @@
             hienToast("Đã huỷ quá trình dò mã!");
         });
 
-        document.getElementById('grantPermissionBtn').addEventListener('click', f
+        document.getElementById('grantPermissionBtn').addEventListener('click', function() {
+            let user = document.getElementById('targetUser').value.trim();
+            let pkg = document.getElementById('packageType').value;
+            
+            if(user !== "") {
+                let proElements = document.querySelectorAll('.pro-feature');
+                let plusElements = document.querySelectorAll('.plus-feature');
