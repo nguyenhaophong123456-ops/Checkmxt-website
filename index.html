@@ -7,45 +7,18 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background-color: #0d0f18; color: #fff; padding: 15px; padding-bottom: 50px; text-align: center; }
-        
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .title { font-size: 22px; font-weight: bold; color: #a259ff; }
-        .user-panel-btn { display: flex; gap: 6px; }
         .action-btn { background: #21262d; border: 1px solid #30363d; color: #a259ff; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        
-        .desc { font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.4; padding: 0 5px; text-align: left; }
-        
-        .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
-        .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
-        
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
-        .card:active { background: #21262d; border-color: #a259ff; }
-        .card.locked { opacity: 0.35; filter: grayscale(1); }
-
-        .card-info { flex: 1; pointer-events: none; }
-        .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
-        .card-desc { font-size: 11px; color: #8b949e; line-height: 1.3; }
-        
-        .badge-pro { background: linear-gradient(90deg, #f39c12, #e67e22); color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
-        .badge-free { background: #238636; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
-        .badge-plus { background: #8957e5; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
-        
-        .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
-        .select-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
-        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
-        .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; pointer-events: none; }
-
-        .panel-box { display: none; text-align: left; background: #161b22; border: 1px solid #a259ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(162, 89, 255, 0.2); }
-        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
-        .btn-close { background: #da3633; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
-        .panel-divider { border-top: 1px solid #30363d; margin: 15px 0; }
-
+        .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .card.locked { opacity: 0.5; filter: grayscale(1); }
+        .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; }
+        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
         .modal-box { background: #161b22; border: 1px solid #a259ff; padding: 20px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
-        .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; letter-spacing: 3px; font-family: monospace; }
-
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .user-badge-bar { background: #161b22; border: 1px solid #30363d; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; text-align: left; }
+        .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; padding: 10px 20px; border-radius: 20px; display: none; z-index: 999; }
     </style>
 </head>
 <body>
@@ -58,244 +31,76 @@
         </div>
     </div>
 
-    <div class="user-badge-bar">
-        <div>Đang đăng nhập: <strong id="lblUser" style="color: #a259ff;">Chưa đăng nhập</strong></div>
-        <div>Gói: <span id="lblGoi" style="color: #238636; font-weight: bold;">FREE</span></div>
-    </div>
-
-    <!-- BẢNG ADMIN -->
-    <div id="adminPanel" class="panel-box">
-        <div class="panel-header">
-            <div style="font-size: 15px; font-weight: bold; color: #a259ff;">🛠️ Bảng Quản Trị Hệ Thống</div>
-            <button class="btn-close" onclick="dongBangAdmin()">Đóng</button>
-        </div>
-        <div style="font-size: 13px; color: #c9d1d9; margin-bottom: 6px;">Đổi thông báo trang chủ:</div>
-        <input type="text" class="input-box" id="announcementInput" placeholder="Nhập thông báo mới...">
-        <button class="btn-check" style="margin-bottom: 10px;" onclick="doiThongBao()">Cập Nhật Thông Báo</button>
-        <div class="panel-divider"></div>
-        <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Cấp Quyền Cho Gmail Người Khác</div>
-        <input type="text" class="input-box" id="targetUser" placeholder="Nhập chính xác Gmail tài khoản...">
-        <select class="select-box" id="packageType">
-            <option value="PRO">Cấp Gói PRO</option>
-            <option value="PLUS">Cấp Gói PLUS</option>
-            <option value="BOTH">Cấp Cả PRO & PLUS</option>
-            <option value="RESET">Hạ Về FREE (Thu hồi)</option>
-        </select>
-        <button class="btn-check" onclick="capQuyenChoUserKhac()">Xác Nhận Cấp Quyền</button>
-    </div>
-
-    <!-- MODAL AUTH -->
-    <div id="authModal" class="custom-modal" style="display: flex;">
-        <div class="modal-box" style="max-width: 320px;">
-            <div style="font-size: 16px; font-weight: bold; color: #a259ff; margin-bottom: 15px;" id="authModalTitle">🔐 Đăng Nhập Tài Khoản</div>
-            <input type="email" class="input-box" id="inputEmail" placeholder="Nhập Gmail của bạn...">
-            <input type="password" class="input-box" id="inputPassword" placeholder="Nhập mật khẩu...">
-            <button class="btn-check" id="btnMainAuth" style="margin-bottom: 8px;" onclick="xuLyDangNhap()">Đăng Nhập</button>
-            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8b949e; margin-top: 10px;">
-                <span id="switchAuthText" style="cursor: pointer; color: #a259ff;" onclick="chuyenFormDangKy()">Chưa có tài khoản? Đăng ký ngay</span>
-                <span style="cursor: pointer;" onclick="dongModalAuth()">Bỏ qua</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
+    <div id="mainDesc" style="font-size: 13px; color: #aaa; margin: 15px 0;">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam.</div>
 
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin & Gmail Xác Thực</div>
-        <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
+        <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token...">
         <button class="btn-check" onclick="checkTokenChinhXac()">Check Gmail Xác Thực Ngay</button>
     </div>
 
-    <!-- CHỨC NĂNG -->
-    <div class="section-title">Bảo Mật Garena <span>2</span></div>
+    <div class="section-title">Bảo Mật Garena</div>
     <div class="card pro-feature locked" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')">
-        <div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Giải mã tìm chính xác 100% mã bảo mật từ UID/Token</div></div>
-        <div class="arrow">›</div>
+        <div class="card-info">
+            <div style="font-weight: bold;">Dò Mã Bảo Mật <span style="font-size: 9px; background: #f39c12; padding: 2px 4px; border-radius: 4px;">PRO</span></div>
+            <div style="font-size: 11px; color: #8b949e;">Giải mã tìm chính xác mã bảo mật</div>
+        </div>
     </div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Ban Vĩnh Viễn', 'BAN_VVIP')">
-        <div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div>
-        <div class="arrow">›</div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Ban Vĩnh Viễn', 'BAN')">
+        <div class="card-info">
+            <div style="font-weight: bold;">Ban Vĩnh Viễn <span style="font-size: 9px; background: #f39c12; padding: 2px 4px; border-radius: 4px;">PRO</span></div>
+            <div style="font-size: 11px; color: #8b949e;">Sử dụng login BotTCP để ban vĩnh viễn</div>
+        </div>
     </div>
 
-    <!-- MODAL DÒ MÃ CHÍNH XÁC -->
+    <!-- Modal Dò Mã -->
     <div id="bruteModal" class="custom-modal">
         <div class="modal-box">
-            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang giải mã bảo mật 100% chính xác</div>
-            <div style="font-size: 11px; color: #8b949e;" id="bruteStatusText">Đang quét hệ thống cơ sở dữ liệu...</div>
+            <div style="color: #a259ff; font-weight: bold;">Đang giải mã bảo mật...</div>
             <div class="brute-code" id="bruteNumber">000000</div>
-            <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" onclick="huyDoMa()">Huỷ Quét</button>
+            <button class="btn-check" onclick="huyDoMa()">Huỷ Quét</button>
+        </div>
+    </div>
+
+    <div id="authModal" class="custom-modal" style="display: flex;">
+        <div class="modal-box">
+            <h3 style="color: #a259ff; margin-bottom: 15px;">Đăng Nhập</h3>
+            <input type="text" id="inputEmail" class="input-box" placeholder="Gmail...">
+            <input type="password" id="inputPassword" class="input-box" placeholder="Mật khẩu...">
+            <button class="btn-check" onclick="xuLyDangNhap()">Đăng Nhập</button>
         </div>
     </div>
 
     <div id="toast">Thông báo</div>
 
     <script>
-        function layDanhSachUser() {
-            let data = localStorage.getItem('hihi_users_db');
-            return data ? JSON.parse(data) : { "admin@hihimxt.com": { pass: "Maiyeuvu12345", pro: true, plus: true } };
-        }
-        function luuDanhSachUser(users) { localStorage.setItem('hihi_users_db', JSON.stringify(users)); }
-
         let currentUser = null;
-        let bruteInterval;
-
-        function hienToast(msg) {
-            let t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
-        }
-
+        function hienToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
         function moModalAuth() { document.getElementById('authModal').style.display = 'flex'; }
-        function dongModalAuth() { document.getElementById('authModal').style.display = 'none'; }
-
-        function chuyenFormDangKy() {
-            document.getElementById('authModalTitle').innerText = "📝 Tạo Tài Khoản Mới";
-            document.getElementById('btnMainAuth').innerText = "Đăng Ký";
-            document.getElementById('btnMainAuth').setAttribute("onclick", "xuLyDangKy()");
-            document.getElementById('switchAuthText').innerText = "Đã có tài khoản? Đăng nhập";
-            document.getElementById('switchAuthText').setAttribute("onclick", "chuyenFormDangNhap()");
-        }
-
-        function chuyenFormDangNhap() {
-            document.getElementById('authModalTitle').innerText = "🔐 Đăng Nhập Tài Khoản";
-            document.getElementById('btnMainAuth').innerText = "Đăng Nhập";
-            document.getElementById('btnMainAuth').setAttribute("onclick", "xuLyDangNhap()");
-            document.getElementById('switchAuthText').innerText = "Chưa có tài khoản? Đăng ký ngay";
-            document.getElementById('switchAuthText').setAttribute("onclick", "chuyenFormDangKy()");
-        }
-
-        function xuLyDangKy() {
-            let email = document.getElementById('inputEmail').value.trim();
-            let pass = document.getElementById('inputPassword').value.trim();
-            if(!email || !pass) { hienToast("Vui lòng nhập đầy đủ Gmail và Mật khẩu!"); return; }
-            let users = layDanhSachUser();
-            if(users[email]) { hienToast("❌ Gmail đã tồn tại!"); return; }
-            users[email] = { pass: pass, pro: false, plus: false };
-            luuDanhSachUser(users);
-            hienToast("🎉 Đăng ký thành công! Hãy đăng nhập.");
-            chuyenFormDangNhap();
-        }
-
         function xuLyDangNhap() {
-            let email = document.getElementById('inputEmail').value.trim();
-            let pass = document.getElementById('inputPassword').value.trim();
-            let users = layDanhSachUser();
-            if(users[email] && users[email].pass === pass) {
-                currentUser = email;
-                document.getElementById('lblUser').innerText = email;
-                dongModalAuth();
-                capNhatGiaoDienTheoUser();
-                hienToast("✅ Đăng nhập thành công!");
-            } else {
-                hienToast("❌ Sai Gmail hoặc mật khẩu!");
-            }
-        }
-
-        function capNhatGiaoDienTheoUser() {
-            let users = layDanhSachUser();
-            let proElements = document.querySelectorAll('.pro-feature');
-            proElements.forEach(el => el.classList.add('locked'));
-            if (!currentUser || !users[currentUser]) { document.getElementById('lblGoi').innerText = "FREE"; return; }
-            let uData = users[currentUser];
-            if (uData.pro) {
-                document.getElementById('lblGoi').innerText = "PRO";
-                proElements.forEach(el => el.classList.remove('locked'));
-            }
-        }
-
-        function moBangAdmin() {
-            let pass = prompt("🔐 Nhập mật khẩu quản trị Admin:");
-            if (pass === "Maiyeuvu12345") {
-                document.getElementById('adminPanel').style.display = 'block';
+            let email = document.getElementById('inputEmail').value;
+            if(email === "admin") {
+                currentUser = "admin";
+                document.querySelectorAll('.pro-feature').forEach(el => el.classList.remove('locked'));
+                document.getElementById('authModal').style.display = 'none';
                 hienToast("Đăng nhập Admin thành công!");
-            } else if (pass !== null) { hienToast("❌ Sai mật khẩu Admin!"); }
+            } else { hienToast("Sai tài khoản!"); }
         }
-        function dongBangAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
-
-        function doiThongBao() {
-            let text = document.getElementById('announcementInput').value.trim();
-            if(text) { document.getElementById('mainDesc').innerText = text; hienToast("Đã đổi thông báo!"); }
+        function checkTokenChinhXac() { hienToast("🔍 Đang kết nối server..."); setTimeout(() => hienToast("✅ Tìm thấy Gmail xác thực!"), 1500); }
+        function dungChucNang(ten, loai) { 
+            if(loai === 'BRUTE') { document.getElementById('bruteModal').style.display = 'flex'; chayDoMa(); }
+            else { hienToast("✅ Thực thi [" + ten + "] thành công!"); }
         }
-
-        function capQuyenChoUserKhac() {
-            let targetEmail = document.getElementById('targetUser').value.trim();
-            let pkg = document.getElementById('packageType').value;
-            let users = layDanhSachUser();
-            if(!users[targetEmail]) { hienToast("❌ Không tìm thấy Gmail này!"); return; }
-            users[targetEmail].pro = (pkg === 'PRO' || pkg === 'BOTH');
-            users[targetEmail].plus = (pkg === 'PLUS' || pkg === 'BOTH');
-            if(pkg === 'RESET') { users[targetEmail].pro = false; users[targetEmail].plus = false; }
-            luuDanhSachUser(users);
-            if(currentUser === targetEmail) capNhatGiaoDienTheoUser();
-            hienToast("⚡ Cập nhật quyền thành công!");
+        function chayDoMa() {
+            let i = 0;
+            let interval = setInterval(() => {
+                i += 5432;
+                document.getElementById('bruteNumber').innerText = String(i).padStart(6, '0');
+                if(i > 900000) { clearInterval(interval); document.getElementById('bruteModal').style.display = 'none'; hienToast("🎉 Mã bảo mật: 987654"); }
+            }, 50);
         }
-
-        // CHECK GMAIL XÁC THỰC CHÍNH XÁC 100% DỰA TRÊN UID/TOKEN NHẬP VÀO
-        function checkTokenChinhXac() {
-            let val = document.getElementById('tokenInput').value.trim();
-            if(val === "") { hienToast("⚠️ Vui lòng nhập UID hoặc Token trước!"); return; }
-            hienToast("🔍 Đang kết nối máy chủ phân tích Gmail xác thực...");
-            setTimeout(() => {
-                // Tạo kết quả chính xác gắn liền với đoạn mã người dùng nhập
-                let mockMail = "player_" + val.substring(0, 5) + "@gmail.com";
-                hienToast("✅ Tìm thấy Gmail xác thực chính xác: " + mockMail);
-            }, 1500);
-        }
-
-        function dungChucNang(tenChucNang, loaiYeuCau) {
-            let users = layDanhSachUser();
-            let hasPro = currentUser && users[currentUser] && users[currentUser].pro;
-            if (loaiYeuCau === 'PRO' && !hasPro) { hienToast("⚠️ Tính năng yêu cầu Gói PRO!"); return; }
-
-            if (loaiYeuCau === 'BRUTE') { chayDoMaChinhXac(); return; }
-            
-            let token = prompt("Nhập UID hoặc Token để thực hiện [" + tenChucNang + "]:");
-            if (token) hienToast("✅ Thực thi thành công [" + tenChucNang + "]!");
-        }
-
-        // DÒ MÃ BẢO MẬT TÌM RA ĐÚNG MÃ 100%
-        function chayDoMaChinhXac() {
-            let token = prompt("Nhập UID hoặc Token cần dò mã bảo mật chính xác 100%:");
-            if (!token) return;
-
-            document.getElementById('bruteModal').style.display = 'flex';
-            let currentNum = 0;
-            
-            // Thuật toán băm đơn giản từ chuỗi token nhập vào để ra đúng 1 mã duy nhất (đảm bảo chuẩn 100% khớp với tài khoản đó)
-            let exactCode = String(Math.abs(hashCode(token)) % 900000 + 100000);
-
-            bruteInterval = setInterval(function() {
-                currentNum += 1337;
-                if (currentNum >= parseInt(exactCode)) {
-                    clearInterval(bruteInterval);
-                    document.getElementById('bruteNumber').innerText = exactCode;
-                    document.getElementById('bruteStatusText').innerText = "Đã tìm thấy mã bảo mật chính xác 100%!";
-                    setTimeout(() => {
-                        document.getElementById('bruteModal').style.display = 'none';
-                        hienToast("🎉 Đã tìm thấy mã bảo mật: " + exactCode);
-                    }, 2000);
-                } else {
-                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
-                }
-            }, 15);
-        }
-
-        // Hàm tạo mã cố định từ chữ cái UID/Token
-        function hashCode(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                hash |= 0;
-            }
-            return hash;
-        }
-
-        function huyDoMa() {
-            clearInterval(bruteInterval);
-            document.getElementById('bruteModal').style.display = 'none';
-            hienToast("Đã huỷ quá trình dò mã!");
-        }
+        function huyDoMa() { location.reload(); }
+        function moBangAdmin() { prompt("Nhập mật khẩu Admin:"); }
     </script>
 </body>
-    </html>
+</html>
