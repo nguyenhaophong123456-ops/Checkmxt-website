@@ -61,7 +61,7 @@
     </div>
 
     <div class="user-badge-bar">
-        <div>Đang đăng nhập: <strong id="lblUser" style="color: #a259ff;">Khách (Chưa đăng nhập)</strong></div>
+        <div>Đang đăng nhập: <strong id="lblUser" style="color: #a259ff;">Chưa đăng nhập</strong></div>
         <div>Gói: <span id="lblGoi" style="color: #238636; font-weight: bold;">FREE</span></div>
     </div>
 
@@ -78,8 +78,8 @@
 
         <div class="panel-divider"></div>
 
-        <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Cấp Quyền Cho Tài Khoản Khác</div>
-        <input type="text" class="input-box" id="targetUser" placeholder="Nhập chính xác Tên tài khoản...">
+        <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Cấp Quyền Cho Gmail Người Khác</div>
+        <input type="text" class="input-box" id="targetUser" placeholder="Nhập chính xác Gmail tài khoản...">
         <select class="select-box" id="packageType">
             <option value="PRO">Cấp Gói PRO</option>
             <option value="PLUS">Cấp Gói PLUS</option>
@@ -89,17 +89,18 @@
         <button class="btn-check" onclick="capQuyenChoUserKhac()">Xác Nhận Cấp Quyền</button>
     </div>
 
-    <!-- BẢNG ĐĂNG NHẬP / ĐĂNG KÝ -->
+    <!-- BẢNG ĐĂNG NHẬP / ĐĂNG KÝ (SỬ DỤNG GMAIL & MẬT KHẨU) -->
     <div id="authModal" class="custom-modal" style="display: flex;">
         <div class="modal-box" style="max-width: 320px;">
-            <div style="font-size: 16px; font-weight: bold; color: #a259ff; margin-bottom: 15px;">🔐 Đăng Nhập / Tạo Tài Khoản</div>
-            <input type="text" class="input-box" id="inputUsername" placeholder="Nhập tên tài khoản...">
+            <div style="font-size: 16px; font-weight: bold; color: #a259ff; margin-bottom: 15px;" id="authModalTitle">🔐 Đăng Nhập Tài Khoản</div>
+            <input type="email" class="input-box" id="inputEmail" placeholder="Nhập Gmail của bạn...">
             <input type="password" class="input-box" id="inputPassword" placeholder="Nhập mật khẩu...">
-            <div style="display: flex; gap: 8px;">
-                <button class="btn-check" style="flex: 1; margin-bottom: 0;" onclick="xuLyDangNhap()">Đăng Nhập</button>
-                <button class="btn-check" style="flex: 1; margin-bottom: 0; background: #21262d; border: 1px solid #a259ff;" onclick="xuLyDangKy()">Đăng Ký</button>
+            
+            <button class="btn-check" id="btnMainAuth" style="margin-bottom: 8px;" onclick="xuLyDangNhap()">Đăng Nhập</button>
+            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8b949e; margin-top: 10px;">
+                <span id="switchAuthText" style="cursor: pointer; color: #a259ff;" onclick="chuyenFormDangKy()">Chưa có tài khoản? Đăng ký ngay</span>
+                <span style="cursor: pointer;" onclick="dongModalAuth()">Bỏ qua</span>
             </div>
-            <div style="margin-top: 12px; font-size: 11px; color: #8b949e; cursor: pointer;" onclick="dongModalAuth()">Bỏ qua / Xem trang chủ</div>
         </div>
     </div>
 
@@ -151,15 +152,16 @@
 
     <script>
         function layDanhSachUser() {
-            let data = localStorage.getItem('hihi_users');
-            return data ? JSON.parse(data) : { "admin": { pass: "Maiyeuvu12345", pro: true, plus: true } };
+            let data = localStorage.getItem('hihi_users_db');
+            return data ? JSON.parse(data) : { "admin@hihimxt.com": { pass: "Maiyeuvu12345", pro: true, plus: true } };
         }
         function luuDanhSachUser(users) {
-            localStorage.setItem('hihi_users', JSON.stringify(users));
+            localStorage.setItem('hihi_users_db', JSON.stringify(users));
         }
 
-        let currentUser = null;
+        let currentUser = null; // Lưu email đang đăng nhập
         let bruteInterval;
+        let dangOChDoDangKy = false;
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -171,32 +173,52 @@
         function moModalAuth() { document.getElementById('authModal').style.display = 'flex'; }
         function dongModalAuth() { document.getElementById('authModal').style.display = 'none'; }
 
+        function chuyenFormDangKy() {
+            dangOChDoDangKy = true;
+            document.getElementById('authModalTitle').innerText = "📝 Tạo Tài Khoản Mới";
+            document.getElementById('btnMainAuth').innerText = "Đăng Ký";
+            document.getElementById('btnMainAuth').setAttribute("onclick", "xuLyDangKy()");
+            document.getElementById('switchAuthText').innerText = "Đã có tài khoản? Đăng nhập";
+            document.getElementById('switchAuthText').setAttribute("onclick", "chuyenFormDangNhap()");
+        }
+
+        function chuyenFormDangNhap() {
+            dangOChDoDangKy = false;
+            document.getElementById('authModalTitle').innerText = "🔐 Đăng Nhập Tài Khoản";
+            document.getElementById('btnMainAuth').innerText = "Đăng Nhập";
+            document.getElementById('btnMainAuth').setAttribute("onclick", "xuLyDangNhap()");
+            document.getElementById('switchAuthText').innerText = "Chưa có tài khoản? Đăng ký ngay";
+            document.getElementById('switchAuthText').setAttribute("onclick", "chuyenFormDangKy()");
+        }
+
         function xuLyDangKy() {
-            let u = document.getElementById('inputUsername').value.trim();
-            let p = document.getElementById('inputPassword').value.trim();
-            if(!u || !p) { hienToast("Vui lòng điền tài khoản & mật khẩu!"); return; }
+            let email = document.getElementById('inputEmail').value.trim();
+            let pass = document.getElementById('inputPassword').value.trim();
+            if(!email || !pass) { hienToast("Vui lòng nhập đầy đủ Gmail và Mật khẩu!"); return; }
 
             let users = layDanhSachUser();
-            if(users[u]) { hienToast("❌ Tài khoản đã tồn tại!"); return; }
+            if(users[email]) { hienToast("❌ Gmail này đã được đăng ký trước đó!"); return; }
 
-            users[u] = { pass: p, pro: false, plus: false };
+            // Tạo tài khoản mới với mặc định gói FREE (chưa có quyền Pro/Plus)
+            users[email] = { pass: pass, pro: false, plus: false };
             luuDanhSachUser(users);
-            hienToast("🎉 Đăng ký thành công! Hãy đăng nhập.");
+            hienToast("🎉 Đăng ký thành công! Hãy bấm chuyển sang Đăng Nhập.");
+            chuyenFormDangNhap();
         }
 
         function xuLyDangNhap() {
-            let u = document.getElementById('inputUsername').value.trim();
-            let p = document.getElementById('inputPassword').value.trim();
+            let email = document.getElementById('inputEmail').value.trim();
+            let pass = document.getElementById('inputPassword').value.trim();
             let users = layDanhSachUser();
 
-            if(users[u] && users[u].pass === p) {
-                currentUser = u;
-                document.getElementById('lblUser').innerText = u;
+            if(users[email] && users[email].pass === pass) {
+                currentUser = email;
+                document.getElementById('lblUser').innerText = email;
                 dongModalAuth();
                 capNhatGiaoDienTheoUser();
-                hienToast("✅ Đăng nhập thành công: " + u);
+                hienToast("✅ Đăng nhập thành công tài khoản: " + email);
             } else {
-                hienToast("❌ Sai tài khoản hoặc mật khẩu!");
+                hienToast("❌ Sai Gmail hoặc mật khẩu!");
             }
         }
 
@@ -260,32 +282,8 @@
         }
 
         function capQuyenChoUserKhac() {
-            let target = document.getElementById('targetUser').value.trim();
+            let targetEmail = document.getElementById('targetUser').value.trim();
             let pkg = document.getElementById('packageType').value;
             let users = layDanhSachUser();
 
-            if(target === "") { hienToast("Vui lòng nhập tên tài khoản cần cấp!"); return; }
-            if(!users[target]) { hienToast("❌ Không tìm thấy tài khoản [" + target + "]!"); return; }
-
-            if (pkg === 'PRO') users[target].pro = true;
-            else if (pkg === 'PLUS') users[target].plus = true;
-            else if (pkg === 'BOTH') { users[target].pro = true; users[target].plus = true; }
-            else if (pkg === 'RESET') { users[target].pro = false; users[target].plus = false; }
-
-            luuDanhSachUser(users);
-            if(currentUser === target) capNhatGiaoDienTheoUser();
-            hienToast("⚡ Cập nhật quyền thành công cho: " + target);
-            document.getElementById('targetUser').value = "";
-        }
-
-        function dungChucNang(tenChucNang, loaiYeuCau) {
-            let users = layDanhSachUser();
-            let hasPro = currentUser && users[currentUser] && users[currentUser].pro;
-            let hasPlus = currentUser && users[currentUser] && users[currentUser].plus;
-
-            if ((loaiYeuCau === 'PRO' || loaiYeuCau === 'PRO_EMAIL' || loaiYeuCau === 'BRUTE' || loaiYeuCau === 'BAN_VVIP') && !hasPro) {
-                hienToast("⚠️ Tính năng [" + tenChucNang + "] yêu cầu nâng cấp Gói PRO!");
-                return;
-            }
-            if ((loaiYeuCau === 'PLUS' || loaiYeuCau === 'CHAN_OTP') && !hasPlus) {
-                hienToast("⚠️ Tính năng [" + tenChucNang + "] yêu cầu nâng cấp G
+            if(targetEma
