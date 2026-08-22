@@ -30,7 +30,6 @@
         .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
         .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; }
 
-        /* Khung thông báo nhỏ */
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
     </style>
 </head>
@@ -42,7 +41,6 @@
     </div>
     <div class="desc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
 
-    <!-- Ô tra cứu chính -->
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
@@ -169,7 +167,6 @@
         <div class="arrow">›</div>
     </div>
 
-    <!-- Khung hiển thị thông báo -->
     <div id="toast">Thông báo</div>
 
     <script>
@@ -188,9 +185,8 @@
 
         function moKhuVucAdmin() {
             let matKhau = prompt("Nhập mật khẩu truy cập khu vực Admin:");
-            if (matKhau === "admin123") {
-                hienToast("Đăng nhập Admin thành công! Đang chuyển hướng...");
-                // Bạn có thể tùy chỉnh chuyển hướng sang trang quản trị sau này
+            if (matKhau === "Maiyeuvu12345") {
+                hienToast("Đăng nhập Admin thành công!");
             } else if (matKhau !== null) {
                 hienToast("Mật khẩu Admin không đúng!");
             }
