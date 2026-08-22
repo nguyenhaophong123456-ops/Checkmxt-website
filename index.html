@@ -1,4 +1,4 @@
-<div class="card plus-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PLUS')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -111,8 +111,8 @@
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
     <div class="card pro-feature locked" onclick="dungChucNang('Spam Log', 'PRO')"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
-    <!-- Đã khóa tính năng OTP sang PRO -->
-    <div class="card pro-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PRO')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-pro">PRO</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
+    <!-- Đã sửa thành gói PLUS chuẩn xác -->
+    <div class="card plus-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PLUS')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
     <div class="card plus-feature locked" onclick="dungChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
 
     <!-- Modal Dò Mã -->
@@ -129,8 +129,8 @@
 
     <script>
         let bruteInterval;
-        let hasPro = false;  // Mặc định vào web là KHÔNG có PRO (Free)
-        let hasPlus = false; // Mặc định vào web là KHÔNG có PLUS (Free)
+        let hasPro = false;  
+        let hasPlus = false; 
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -297,4 +297,9 @@
                 document.getElementById('currentStatusBadge').innerText = currentText;
                 document.getElementById('targetUser').value = "";
             } else {
-                hienToast("Vui lòng nhập UID hoặc t
+                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
+            }
+        }
+    </script>
+</body>
+  </html>
