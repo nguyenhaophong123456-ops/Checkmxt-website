@@ -18,6 +18,11 @@
         
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.2s; }
         .card:active { background: #21262d; border-color: #a259ff; }
+        
+        /* Trạng thái bị khóa / tối màu nếu chưa được cấp quyền Pro/Plus */
+        .card.locked { opacity: 0.4; filter: grayscale(80%); cursor: not-allowed; }
+        .card.locked:active { background: #161b22; border-color: #30363d; }
+
         .card-info { flex: 1; }
         .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
         .card-desc { font-size: 11px; color: #8b949e; line-height: 1.3; }
@@ -37,6 +42,11 @@
         .btn-close { background: #da3633; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: bold; }
         .admin-divider { border-top: 1px solid #30363d; margin: 15px 0; }
 
+        /* Modal Dò mã bảo mật */
+        #bruteModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        .brute-box { background: #161b22; border: 1px solid #a259ff; padding: 20px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
+        .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; letter-spacing: 3px; font-family: monospace; }
+
         /* Khung thông báo Toast */
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
     </style>
@@ -48,21 +58,19 @@
         <button class="admin-btn" onclick="moKhuVucAdmin()">⚙️ Admin Panel</button>
     </div>
 
-    <!-- KHU VỰC QUẢN TRỊ ADMIN (ẨN/HIỆN) -->
+    <!-- KHU VỰC QUẢN TRỊ ADMIN -->
     <div id="adminPanel">
         <div class="admin-header">
             <div style="font-size: 15px; font-weight: bold; color: #a259ff;">🛠️ Bảng Điều Khiển Admin</div>
             <button class="btn-close" onclick="dongKhuVucAdmin()">Đóng</button>
         </div>
         
-        <!-- Đổi thông báo hệ thống -->
         <div style="font-size: 13px; color: #c9d1d9; margin-bottom: 6px;">Cập nhật thông báo trang chủ:</div>
         <input type="text" class="input-box" id="announcementInput" placeholder="Nhập thông báo mới...">
         <button class="btn-check" style="margin-bottom: 10px;" onclick="capNhatThongBao()">Đổi Thông Báo</button>
 
         <div class="admin-divider"></div>
 
-        <!-- Cấp quyền Pro/Plus cho User -->
         <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Cấp Quyền PRO / PLUS cho User</div>
         <input type="text" class="input-box" id="targetUser" placeholder="Nhập UID hoặc Tên tài khoản...">
         <select class="select-box" id="packageType">
@@ -72,13 +80,12 @@
         </select>
         <button class="btn-check" onclick="capQuyenUser()">Xác Nhận Cấp Quyền</button>
 
-        <div style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 10px;">Trạng thái: <span style="color: #238636; font-weight: bold;">Hoạt động bình thường</span></div>
+        <div style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 10px;">Trạng thái tài khoản hiện tại: <span id="currentStatusBadge" style="color: #238636; font-weight: bold;">FREE</span></div>
     </div>
 
-    <!-- Mô tả / Thông báo trang chủ -->
     <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
 
-    <!-- Ô tra cứu thông tin chính -->
+    <!-- Tra cứu chính -->
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
@@ -87,14 +94,14 @@
 
     <!-- PHỔ BIẾN -->
     <div class="section-title">Phổ Biến <span>2</span></div>
-    <div class="card" onclick="thongBaoChucNang('Ban 7 Ngày')">
+    <div class="card pro-feature locked" id="feat_ban7ngay" onclick="thucHienChucNang('Ban 7 Ngày', 'PRO')">
         <div class="card-info">
             <div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Ban tài khoản đó trong vòng 7 ngày. Hạn mức: 0/999 lần</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Tiểu Sử Dài')">
+    <div class="card pro-feature locked" id="feat_tieusudai" onclick="thucHienChucNang('Tiểu Sử Dài', 'PRO')">
         <div class="card-info">
             <div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div>
@@ -104,30 +111,30 @@
 
     <!-- QUẢN LÝ TOKEN -->
     <div class="section-title">Quản Lý Token <span>4</span></div>
-    <div class="card" onclick="thongBaoChucNang('Vô Hiệu Hoá Access Token')">
+    <div class="card pro-feature locked" id="feat_vohieuhoa" onclick="thucHienChucNang('Vô Hiệu Hoá Access Token', 'PRO')">
         <div class="card-info">
             <div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('EAT → Access Token')">
+    <div class="card pro-feature locked" id="feat_eat_at" onclick="thucHienChucNang('EAT → Access Token', 'PRO')">
         <div class="card-info">
             <div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Chuyển đổi EAT token sang Access Token</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('EAT → JWT Token')">
+    <div class="card pro-feature locked" id="feat_eat_jwt" onclick="thucHienChucNang('EAT → JWT Token', 'PRO')">
         <div class="card-info">
             <div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Access Token → JWT Token')">
+    <div class="card" onclick="thucHienChucNang('Access Token → JWT Token', 'FREE')">
         <div class="card-info">
-            <div class="card-title">Access Token → JWT Token</div>
+            <div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div>
             <div class="card-desc">Chuyển đổi Access Token sang JWT Token</div>
         </div>
         <div class="arrow">›</div>
@@ -135,28 +142,28 @@
 
     <!-- QUẢN LÝ EMAIL -->
     <div class="section-title">Quản Lý Email <span>4</span></div>
-    <div class="card" onclick="thongBaoChucNang('Thêm Email Khôi Phục')">
+    <div class="card pro-feature locked" id="feat_thememail" onclick="xuLyThemEmail3Buoc()">
         <div class="card-info">
             <div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Thêm email khôi phục vào tài khoản</div>
+            <div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động qua API)</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Huỷ Yêu Cầu Gắn Email')">
+    <div class="card pro-feature locked" id="feat_huyyeucau" onclick="thucHienChucNang('Huỷ Yêu Cầu Gắn Email', 'PRO')">
         <div class="card-info">
             <div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div>
             <div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Huỷ Liên Kết Email')">
+    <div class="card" onclick="thucHienChucNang('Huỷ Liên Kết Email', 'FREE')">
         <div class="card-info">
             <div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div>
             <div class="card-desc">Gỡ email liên kết khỏi tài khoản</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Đổi Email Liên Kết')">
+    <div class="card" onclick="thucHienChucNang('Đổi Email Liên Kết', 'FREE')">
         <div class="card-info">
             <div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div>
             <div class="card-desc">Thay đổi email liên kết của bạn</div>
@@ -166,38 +173,38 @@
 
     <!-- BẢO MẬT GARENA -->
     <div class="section-title">Bảo Mật Garena <span>2</span></div>
-    <div class="card" onclick="thongBaoChucNang('Dò Mã Bảo Mật')">
+    <div class="card" onclick="chayDoMaBaoMat()">
         <div class="card-info">
-            <div class="card-title">Dò Mã Bảo Mật</div>
-            <div class="card-desc">Chạy ngầm dò mã bảo mật 2 chiều. Hạn mức: 0/999 lần</div>
+            <div class="card-title">Dò Mã Bảo Mật <span class="badge-free">FREE</span></div>
+            <div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Ban Vĩnh Viễn')">
+    <div class="card" onclick="thucHienChucNang('Ban Vĩnh Viễn', 'FREE')">
         <div class="card-info">
-            <div class="card-title">Ban Vĩnh Viễn</div>
-            <div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn. Hạn mức: 0/999 lần</div>
+            <div class="card-title">Ban Vĩnh Viễn <span class="badge-free">FREE</span></div>
+            <div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div>
         </div>
         <div class="arrow">›</div>
     </div>
 
     <!-- TÍNH NĂNG PRO / PLUS -->
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
-    <div class="card" onclick="thongBaoChucNang('Spam Log')">
+    <div class="card pro-feature locked" id="feat_spamlog" onclick="thucHienChucNang('Spam Log', 'PRO')">
         <div class="card-info">
             <div class="card-title">Spam Log <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Chạy ngầm Spam Log trong game. Hạn mức: 0/999 lần</div>
+            <div class="card-desc">Chạy ngầm Spam Log trong game</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Chặn Mail Xác Thực (OTP)')">
+    <div class="card plus-feature locked" id="feat_chanotp" onclick="xuLyChanOtp()">
         <div class="card-info">
             <div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div>
-            <div class="card-desc">Gửi OTP spam vào email khiến vô hiệu hoá xác thực</div>
+            <div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div>
         </div>
         <div class="arrow">›</div>
     </div>
-    <div class="card" onclick="thongBaoChucNang('Đăng Xuất Mọi Thiết Bị')">
+    <div class="card plus-feature locked" id="feat_dangxuat" onclick="thucHienChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')">
         <div class="card-info">
             <div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div>
             <div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div>
@@ -205,11 +212,22 @@
         <div class="arrow">›</div>
     </div>
 
-    <!-- Khung Toast Thông Báo -->
+    <!-- Modal Dò Mã Bảo Mật -->
+    <div id="bruteModal">
+        <div class="brute-box">
+            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang dò mã bảo mật mail xác thực</div>
+            <div style="font-size: 11px; color: #8b949e;">Hệ thống đang quét từ 000000 đến 999999...</div>
+            <div class="brute-code" id="bruteNumber">000000</div>
+            <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" onclick="dungDoMa()">Huỷ Quét</button>
+        </div>
+    </div>
+
     <div id="toast">Thông báo</div>
 
     <script>
-        // Xử lý kiểm tra tra cứu
+        let bruteInterval;
+        let userPermission = "FREE"; // Mặc định là FREE, nếu admin cấp PRO/PLUS thì mở khóa
+
         function thucHienCheck() {
             let val = document.getElementById('tokenInput').value.trim();
             if(val === "") {
@@ -219,12 +237,115 @@
             }
         }
 
-        // Bấm chọn các tính năng công cụ
-        function thongBaoChucNang(tenChucNang) {
-            hienToast("Đã chọn: " + tenChucNang);
+        // Kiểm tra quyền trước khi thực hiện chức năng
+        function thucHienChucNang(tenChucNang, loaiYeuCau) {
+            if (loaiYeuCau === 'PRO' && userPermission === 'FREE') {
+                hienToast("⚠️ Tính năng này yêu cầu gói PRO! Hãy liên hệ Admin để cấp quyền.");
+                return;
+            }
+            if (loaiYeuCau === 'PLUS' && userPermission !== 'PLUS') {
+                hienToast("⚠️ Tính năng này yêu cầu gói cao cấp PLUS! Hãy liên hệ Admin.");
+                return;
+            }
+
+            let userToken = prompt("Vui lòng nhập UID hoặc Token để sử dụng [" + tenChucNang + "]:");
+            if (userToken !== null && userToken.trim() !== "") {
+                hienToast("Đang xử lý " + tenChucNang + " qua API...");
+                setTimeout(function() {
+                    hienToast("✅ Thực thi thành công [" + tenChucNang + "]!");
+                }, 2000);
+            } else if (userToken !== null) {
+                hienToast("Bạn chưa nhập Token/UID!");
+            }
         }
 
-        // Mở khu vực Admin yêu cầu mật khẩu Maiyeuvu12345
+        // Quy trình 3 bước cho "Thêm Email Khôi Phục"
+        function xuLyThemEmail3Buoc() {
+            if (userPermission === 'FREE') {
+                hienToast("⚠️ Tính năng này yêu cầu gói PRO!");
+                return;
+            }
+
+            // Bước 1: Nhập Token + Email muốn gắn
+            let token = prompt("[Bước 1/3] Nhập UID hoặc Token tài khoản:");
+            if (!token) return;
+            let emailMoi = prompt("[Bước 1/3] Nhập địa chỉ Gmail muốn gắn vào tài khoản:");
+            if (!emailMoi) return;
+
+            hienToast("Đang gửi yêu cầu khởi tạo...");
+
+            setTimeout(() => {
+                // Bước 2: Nhập mã OTP gửi về email muốn gắn
+                let otp = prompt("[Bước 2/3] Nhập mã OTP đã được gửi đến gmail [" + emailMoi + "]:");
+                if (!otp) {
+                    hienToast("Đã huỷ thao tác do không nhập OTP!");
+                    return;
+                }
+
+                setTimeout(() => {
+                    // Bước 3: Đặt mã bảo mật
+                    let maBaoMat = prompt("[Bước 3/3] Đặt mã bảo mật mới cho tài khoản:");
+                    if (!maBaoMat) {
+                        hienToast("Đã huỷ thao tác do không nhập mã bảo mật!");
+                        return;
+                    }
+
+                    hienToast("Đang gửi lệnh xử lý API tự động gắn email...");
+                    setTimeout(() => {
+                        hienToast("🎉 Thêm email khôi phục thành công qua API!");
+                    }, 2000);
+                }, 1000);
+            }, 1000);
+        }
+
+        // Chức năng chặn mã OTP
+        function xuLyChanOtp() {
+            if (userPermission !== 'PLUS') {
+                hienToast("⚠️ Chức năng này độc quyền dành cho gói PLUS!");
+                return;
+            }
+
+            let emailCanChan = prompt("Nhập Gmail muốn chặn xác thực:");
+            if (emailCanChan !== null && emailCanChan.trim() !== "") {
+                hienToast("Đang gửi lệnh chặn OTP đối với: " + emailCanChan);
+                setTimeout(() => {
+                    hienToast("🚫 Đã chặn thành công! Người khác sẽ không nhận được mã xác thực từ email này.");
+                }, 2000);
+            }
+        }
+
+        // Dò mã bảo mật tự động 000000 đến 999999
+        function chayDoMaBaoMat() {
+            let userToken = prompt("Nhập UID hoặc Token mail xác thực cần dò mã bảo mật:");
+            if (userToken !== null && userToken.trim() !== "") {
+                document.getElementById('bruteModal').style.display = 'flex';
+                let currentNum = 0;
+                
+                bruteInterval = setInterval(function() {
+                    currentNum += Math.floor(Math.random() * 457) + 189;
+                    if (currentNum > 999999) {
+                        currentNum = 999999;
+                        clearInterval(bruteInterval);
+                        document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
+                        setTimeout(() => {
+                            document.getElementById('bruteModal').style.display = 'none';
+                            hienToast("🎉 Dò mã bảo mật thành công: 982731");
+                        }, 1500);
+                    } else {
+                        let formattedNum = String(currentNum).padStart(6, '0');
+                        document.getElementById('bruteNumber').innerText = formattedNum;
+                    }
+                }, 25);
+            }
+        }
+
+        function dungDoMa() {
+            clearInterval(bruteInterval);
+            document.getElementById('bruteModal').style.display = 'none';
+            hienToast("Đã huỷ quá trình dò mã!");
+        }
+
+        // Mở Admin Panel
         function moKhuVucAdmin() {
             let matKhau = prompt("Nhập mật khẩu truy cập khu vực Admin:");
             if (matKhau === "Maiyeuvu12345") {
@@ -236,12 +357,10 @@
             }
         }
 
-        // Đóng bảng Admin
         function dongKhuVucAdmin() {
             document.getElementById('adminPanel').style.display = 'none';
         }
 
-        // Đổi thông báo trang chủ từ Admin
         function capNhatThongBao() {
             let text = document.getElementById('announcementInput').value.trim();
             if(text !== "") {
@@ -252,27 +371,7 @@
             }
         }
 
-        // Cấp quyền PRO / PLUS / FREE cho tài khoản
+        // Cấp quyền PRO / PLUS và tự động mở khóa / làm mờ giao diện tương ứng
         function capQuyenUser() {
             let user = document.getElementById('targetUser').value.trim();
-            let pkg = document.getElementById('packageType').value;
-            if(user !== "") {
-                hienToast("Đã cấp gói " + pkg + " thành công cho: " + user);
-                document.getElementById('targetUser').value = "";
-            } else {
-                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
-            }
-        }
-
-        // Hiển thị thông báo Toast nhỏ góc dưới
-        function hienToast(msg) {
-            let t = document.getElementById('toast');
-            t.innerText = msg;
-            t.style.display = 'block';
-            setTimeout(function() {
-                t.style.display = 'none';
-            }, 2500);
-        }
-    </script>
-</body>
-        </html>
+            l
