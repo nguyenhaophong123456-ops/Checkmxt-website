@@ -10,167 +10,104 @@
         .title { font-size: 22px; font-weight: bold; color: #a259ff; margin: 15px 0 5px 0; }
         .desc { font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.4; padding: 0 5px; }
         
-        .section-title { font-size: 14px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 10px 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
+        .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
         
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 12px; text-align: left; display: flex; align-items: center; justify-content: space-between; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; }
         .card-info { flex: 1; }
-        .card-title { font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
-        .card-desc { font-size: 12px; color: #8b949e; }
+        .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+        .card-desc { font-size: 11px; color: #8b949e; line-height: 1.3; }
         
-        .badge-pro { background: linear-gradient(90deg, #f39c12, #e67e22); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .badge-pro { background: linear-gradient(90deg, #f39c12, #e67e22); color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
+        .badge-free { background: #238636; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
+        .badge-plus { background: #8957e5; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 4px; font-weight: bold; }
         
         .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
         .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
-        
-        .arrow { color: #8b949e; font-size: 18px; font-weight: bold; }
+        .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; }
     </style>
 </head>
 <body>
 
     <div class="title">HIHI MXT</div>
-    <div class="desc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật, nhanh chóng và tối ưu.</div>
+    <div class="desc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam.</div>
 
     <!-- Ô tra cứu chính -->
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
-        <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
+        <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
         <button class="btn-check">Check Ngay</button>
     </div>
 
-    <!-- Nhóm phổ biến -->
-    <div class="section-title">Phổ Biến</div>
+    <!-- QUẢN LÝ EMAIL -->
+    <div class="section-title">Quản Lý Email <span>4</span></div>
     
     <div class="card">
         <div class="card-info">
-            <div class="card-title">🚫 Ban 7 Ngày <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div>
+            <div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div>
+            <div class="card-desc">Thêm email khôi phục vào tài khoản</div>
         </div>
         <div class="arrow">›</div>
     </div>
 
     <div class="card">
         <div class="card-info">
-            <div class="card-title">📝 Tiểu Sử Dài <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div>
+            <div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div>
+            <div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div>
         </div>
         <div class="arrow">›</div>
     </div>
 
-    <!-- Nhóm kiểm tra -->
-    <div class="section-title">Kiểm Tra Tài Khoản</div>
+    <div class="card">
+        <div class="card-info">
+            <div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div>
+            <div class="card-desc">Gỡ email liên kết khỏi tài khoản</div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+
+    <div class="card">
+        <div class="card-info">
+            <div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div>
+            <div class="card-desc">Thay đổi email liên kết của bạn</div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+
+    <!-- BẢO MẬT GARENA -->
+    <div class="section-title">Bảo Mật Garena <span>2</span></div>
     
     <div class="card">
         <div class="card-info">
-            <div class="card-title">✉️ Kiểm Tra Email Khôi Phục <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Kiểm tra email khôi phục của tài khoản</div>
+            <div class="card-title">Dò Mã Bảo Mật</div>
+            <div class="card-desc">Chạy ngầm dò mã bảo mật 2 chiều. Hạn mức: 0/999 lần</div>
         </div>
         <div class="arrow">›</div>
     </div>
 
-    <!-- Nhóm quản lý token -->
-    <div class="section-title">Quản Lý Token</div>
+    <div class="card">
+        <div class="card-info">
+            <div class="card-title">Ban Vĩnh Viễn</div>
+            <div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn. Hạn mức: 0/999 lần</div>
+        </div>
+        <div class="arrow">›</div>
+    </div>
+
+    <!-- TÍNH NĂNG PLUS -->
+    <div class="section-title">Tính Năng Plus <span>2</span></div>
     
     <div class="card">
         <div class="card-info">
-            <div class="card-title">🚫 Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div>
+            <div class="card-title">Chặn Mail Xác Thực <span class="badge-plus">PLUS</span></div>
+            <div class="card-desc">Gửi OTP spam vào email khiến vô hiệu hoá xác thực</div>
         </div>
         <div class="arrow">›</div>
     </div>
 
     <div class="card">
         <div class="card-info">
-            <div class="card-title">🔄 EAT → Access Token <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Chuyển đổi EAT token sang Access Token</div>
-        </div>
-        <div class="arrow">›</div>
-    </div>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIHI MXT - Nền Tảng Công Cụ</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #0d0f18; color: #fff; padding: 15px; padding-bottom: 50px; text-align: center; }
-        .title { font-size: 22px; font-weight: bold; color: #a259ff; margin: 15px 0 5px 0; }
-        .desc { font-size: 13px; color: #aaa; margin-bottom: 20px; line-height: 1.4; padding: 0 5px; }
-        
-        .section-title { font-size: 14px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 10px 5px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 12px; text-align: left; display: flex; align-items: center; justify-content: space-between; }
-        .card-info { flex: 1; }
-        .card-title { font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 8px; }
-        .card-desc { font-size: 12px; color: #8b949e; }
-        
-        .badge-pro { background: linear-gradient(90deg, #f39c12, #e67e22); color: #fff; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        
-        .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
-        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
-        
-        .arrow { color: #8b949e; font-size: 18px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <div class="title">HIHI MXT</div>
-    <div class="desc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật, nhanh chóng và tối ưu.</div>
-
-    <!-- Ô tra cứu chính -->
-    <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
-        <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
-        <input type="text" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
-        <button class="btn-check">Check Ngay</button>
-    </div>
-
-    <!-- Nhóm phổ biến -->
-    <div class="section-title">Phổ Biến</div>
-    
-    <div class="card">
-        <div class="card-info">
-            <div class="card-title">🚫 Ban 7 Ngày <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div>
-        </div>
-        <div class="arrow">›</div>
-    </div>
-
-    <div class="card">
-        <div class="card-info">
-            <div class="card-title">📝 Tiểu Sử Dài <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div>
-        </div>
-        <div class="arrow">›</div>
-    </div>
-
-    <!-- Nhóm kiểm tra -->
-    <div class="section-title">Kiểm Tra Tài Khoản</div>
-    
-    <div class="card">
-        <div class="card-info">
-            <div class="card-title">✉️ Kiểm Tra Email Khôi Phục <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Kiểm tra email khôi phục của tài khoản</div>
-        </div>
-        <div class="arrow">›</div>
-    </div>
-
-    <!-- Nhóm quản lý token -->
-    <div class="section-title">Quản Lý Token</div>
-    
-    <div class="card">
-        <div class="card-info">
-            <div class="card-title">🚫 Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div>
-        </div>
-        <div class="arrow">›</div>
-    </div>
-
-    <div class="card">
-        <div class="card-info">
-            <div class="card-title">🔄 EAT → Access Token <span class="badge-pro">PRO</span></div>
-            <div class="card-desc">Chuyển đổi EAT token sang Access Token</div>
+            <div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div>
+            <div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div>
         </div>
         <div class="arrow">›</div>
     </div>
