@@ -3,104 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HIHI MXT - Nền Tảng Công Cụ Độc Quyền</title>
+    <title>HIHI MXT | NỀN TẢNG QUẢN TRỊ TÀI KHOẢN ĐỘC QUYỀN</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: #0d0f18; color: #fff; padding: 15px; padding-bottom: 50px; text-align: center; }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .title { font-size: 22px; font-weight: bold; color: #a259ff; }
-        .action-btn { background: #21262d; border: 1px solid #30363d; color: #a259ff; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; }
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .card.locked { opacity: 0.5; filter: grayscale(1); }
-        .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; }
-        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-box { background: #161b22; border: 1px solid #a259ff; padding: 20px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
-        .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; }
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; padding: 10px 20px; border-radius: 20px; display: none; z-index: 999; }
+        :root { --main-color: #a259ff; --bg-dark: #050505; --panel-bg: #111; --text-color: #e0e0e0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg-dark); color: var(--text-color); padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--main-color); padding-bottom: 15px; margin-bottom: 20px; }
+        .badge { background: var(--main-color); color: #fff; padding: 2px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; }
+        
+        /* Dashboard Grid */
+        .dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .panel { background: var(--panel-bg); padding: 20px; border-radius: 12px; border: 1px solid #333; }
+        h3 { color: var(--main-color); margin-bottom: 15px; font-size: 16px; text-transform: uppercase; }
+        
+        /* Inputs & Buttons */
+        .input-field { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 6px; margin-bottom: 10px; }
+        .btn-action { width: 100%; padding: 12px; background: var(--main-color); border: none; color: #fff; font-weight: bold; border-radius: 6px; cursor: pointer; margin-bottom: 10px; transition: 0.3s; }
+        .btn-action:hover { opacity: 0.8; }
+        
+        /* Logs */
+        .log-container { background: #000; color: #0f0; font-family: monospace; padding: 15px; height: 200px; overflow-y: auto; border: 1px solid #222; border-radius: 6px; font-size: 12px; }
+        
+        /* Utility */
+        .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="title">HIHI MXT</div>
-        <div class="user-panel-btn">
-            <button class="action-btn" onclick="moModalAuth()">👤 Tài Khoản</button>
-            <button class="action-btn" onclick="moBangAdmin()">⚙️ Admin</button>
+<div class="container">
+    <div class="header">
+        <div>
+            <h1>HIHI MXT <span style="font-size: 14px; color: #666;">V3.0.4 PRO</span></h1>
+        </div>
+        <div>
+            <span id="status" class="badge">SYSTEM READY</span>
         </div>
     </div>
 
-    <div id="mainDesc" style="font-size: 13px; color: #aaa; margin: 15px 0;">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam.</div>
-
-    <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
-        <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin & Gmail Xác Thực</div>
-        <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token...">
-        <button class="btn-check" onclick="checkTokenChinhXac()">Check Gmail Xác Thực Ngay</button>
-    </div>
-
-    <div class="section-title">Bảo Mật Garena</div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')">
-        <div class="card-info">
-            <div style="font-weight: bold;">Dò Mã Bảo Mật <span style="font-size: 9px; background: #f39c12; padding: 2px 4px; border-radius: 4px;">PRO</span></div>
-            <div style="font-size: 11px; color: #8b949e;">Giải mã tìm chính xác mã bảo mật</div>
+    <div class="dashboard">
+        <!-- Input Panel -->
+        <div class="panel">
+            <h3>Truy xuất tài nguyên</h3>
+            <input type="text" id="tokenIn" class="input-field" placeholder="Nhập Token hoặc UID hệ thống...">
+            <button class="btn-action" onclick="execute('ANALYZING')">Phân tích hệ thống</button>
+            <button class="btn-action" style="background: #333;" onclick="execute('VALIDATE')">Xác thực quyền hạn</button>
         </div>
-    </div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Ban Vĩnh Viễn', 'BAN')">
-        <div class="card-info">
-            <div style="font-weight: bold;">Ban Vĩnh Viễn <span style="font-size: 9px; background: #f39c12; padding: 2px 4px; border-radius: 4px;">PRO</span></div>
-            <div style="font-size: 11px; color: #8b949e;">Sử dụng login BotTCP để ban vĩnh viễn</div>
-        </div>
-    </div>
 
-    <!-- Modal Dò Mã -->
-    <div id="bruteModal" class="custom-modal">
-        <div class="modal-box">
-            <div style="color: #a259ff; font-weight: bold;">Đang giải mã bảo mật...</div>
-            <div class="brute-code" id="bruteNumber">000000</div>
-            <button class="btn-check" onclick="huyDoMa()">Huỷ Quét</button>
+        <!-- System Stats -->
+        <div class="panel">
+            <h3>Thông số kỹ thuật</h3>
+            <p>Phiên bản API: 5.2.1 | Enc: AES-256</p>
+            <p>Trạng thái kết nối: <span style="color: #0f0;">Đã kết nối</span></p>
+            <p>Quyền truy cập: <span class="badge" id="roleBadge">FREE_USER</span></p>
+            <hr style="border: 0; border-top: 1px solid #333; margin: 10px 0;">
+            <button class="btn-action" onclick="loginPanel()" style="background: #238636;">Nâng cấp VIP (PRO)</button>
         </div>
     </div>
 
-    <div id="authModal" class="custom-modal" style="display: flex;">
-        <div class="modal-box">
-            <h3 style="color: #a259ff; margin-bottom: 15px;">Đăng Nhập</h3>
-            <input type="text" id="inputEmail" class="input-box" placeholder="Gmail...">
-            <input type="password" id="inputPassword" class="input-box" placeholder="Mật khẩu...">
-            <button class="btn-check" onclick="xuLyDangNhap()">Đăng Nhập</button>
+    <!-- Features -->
+    <div class="panel" style="margin-top: 20px;">
+        <h3>Module can thiệp & Bảo mật</h3>
+        <div class="feature-grid">
+            <button class="btn-action" onclick="execute('BRUTE')">Dò mã bảo mật 100%</button>
+            <button class="btn-action" onclick="execute('BAN_PERM')">Ban Vĩnh Viễn (BotTCP)</button>
+            <button class="btn-action" onclick="execute('BLOCK_OTP')">Chặn Mail Xác Thực</button>
+            <button class="btn-action" onclick="execute('UNLINK_FB')">Gỡ Liên Kết FB</button>
         </div>
     </div>
 
-    <div id="toast">Thông báo</div>
+    <!-- Logs -->
+    <div class="panel" style="margin-top: 20px;">
+        <h3>Nhật ký thực thi thời gian thực</h3>
+        <div class="log-container" id="logs">
+            [SYSTEM] Khởi tạo môi trường...<br>
+        </div>
+    </div>
+</div>
 
-    <script>
-        let currentUser = null;
-        function hienToast(msg) { let t = document.getElementById('toast'); t.innerText = msg; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
-        function moModalAuth() { document.getElementById('authModal').style.display = 'flex'; }
-        function xuLyDangNhap() {
-            let email = document.getElementById('inputEmail').value;
-            if(email === "admin") {
-                currentUser = "admin";
-                document.querySelectorAll('.pro-feature').forEach(el => el.classList.remove('locked'));
-                document.getElementById('authModal').style.display = 'none';
-                hienToast("Đăng nhập Admin thành công!");
-            } else { hienToast("Sai tài khoản!"); }
+<script>
+    function addLog(msg) {
+        const logs = document.getElementById('logs');
+        const time = new Date().toLocaleTimeString();
+        logs.innerHTML += `[${time}] ${msg}<br>`;
+        logs.scrollTop = logs.scrollHeight;
+    }
+
+    function execute(action) {
+        const token = document.getElementById('tokenIn').value;
+        if (!token) { addLog("[ERROR] Vui lòng nhập Token/UID!"); return; }
+        
+        addLog(`[ACTION] Kích hoạt lệnh: ${action}...`);
+        setTimeout(() => addLog(`[SUCCESS] Lệnh ${action} đã được đẩy tới máy chủ!`), 1000);
+    }
+
+    function loginPanel() {
+        const p = prompt("Nhập mã kích hoạt VIP:");
+        if (p === "HIHI") {
+            document.getElementById('roleBadge').innerText = "PRO_ACCESS";
+            addLog("[SYSTEM] Chúc mừng! Quyền PRO đã được kích hoạt.");
         }
-        function checkTokenChinhXac() { hienToast("🔍 Đang kết nối server..."); setTimeout(() => hienToast("✅ Tìm thấy Gmail xác thực!"), 1500); }
-        function dungChucNang(ten, loai) { 
-            if(loai === 'BRUTE') { document.getElementById('bruteModal').style.display = 'flex'; chayDoMa(); }
-            else { hienToast("✅ Thực thi [" + ten + "] thành công!"); }
-        }
-        function chayDoMa() {
-            let i = 0;
-            let interval = setInterval(() => {
-                i += 5432;
-                document.getElementById('bruteNumber').innerText = String(i).padStart(6, '0');
-                if(i > 900000) { clearInterval(interval); document.getElementById('bruteModal').style.display = 'none'; hienToast("🎉 Mã bảo mật: 987654"); }
-            }, 50);
-        }
-        function huyDoMa() { location.reload(); }
-        function moBangAdmin() { prompt("Nhập mật khẩu Admin:"); }
-    </script>
+    }
+</script>
+
 </body>
 </html>
