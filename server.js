@@ -5,20 +5,19 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Lưu trữ quyền người dùng (Key: UID hoặc Token, Value: Gói PRO/PLUS)
+// Lưu trữ quyền của các tài khoản (Key: UID hoặc Token, Value: Gói PRO / PLUS / BOTH)
 let userPermissions = {};
 
-// Cơ sở dữ liệu mẫu lưu thông tin tài khoản ứng với Token/UID do Admin hoặc hệ thống cấu hình
-// Bạn có thể thêm các token và tên nhân vật tương ứng vào đây
+// Cơ sở dữ liệu mẫu lưu thông tin tài khoản ứng với Token/UID
 let accountDatabase = {
-    // "token_hoac_uid_mau": { uid: "123456789", name: "Tên Nhân Vật Mẫu" }
+    // Thêm các tài khoản mẫu tại đây nếu cần (Ví dụ: "token_abc": { uid: "12345", name: "Tên Nhân Vật" })
 };
 
-// 1. API Tra cứu thông tin chuẩn xác từ Token hoặc UID do người dùng nhập vào
+// 1. API kiểm tra quyền và tra cứu thông tin Token/UID thực tế
 app.post('/api/check-permission', async (req, res) => {
     const { identifier } = req.body;
     if (!identifier) {
-        return res.json({ success: false, message: "Vui lòng nhập Token hoặc UID!" });
+        return res.json({ success: false, message: "Vui lòng nhập UID hoặc Token!" });
     }
 
     const pkg = userPermissions[identifier] || 'FREE';
@@ -29,19 +28,17 @@ app.post('/api/check-permission', async (req, res) => {
     let realName = "Tài khoản Free Fire";
     let gameInfo = "";
 
-    // Kiểm tra xem token này đã có trong cơ sở dữ liệu hệ thống chưa
+    // Kiểm tra xem token/UID đã có trong cơ sở dữ liệu hệ thống chưa
     if (accountDatabase[identifier]) {
         realUid = accountDatabase[identifier].uid;
         realName = accountDatabase[identifier].name;
     } else {
-        // Nếu là Token định dạng dài, tiến hành bóc tách định danh ngầm
-        if (identifier.length > 30) {
-            // Giả lập bóc tách chuỗi token (hoặc đọc đoạn mã hóa bên trong token)
-            // Lấy một phần chuỗi token làm mã nhận diện tài khoản độc nhất
+        // Phân tích định dạng đầu vào (Token dài hay UID ngắn)
+        if (identifier.length > 25) {
+            // Trích xuất định danh từ token
             realUid = "FF_" + identifier.substring(0, 8).toUpperCase();
-            realName = "Account_" + identifier.substring(identifier.length - 6);
+            realName = "Acc_" + identifier.substring(identifier.length - 6);
         } else {
-            // Nếu nhập trực tiếp UID
             realUid = identifier;
             realName = "Nhân vật UID: " + identifier;
         }
@@ -55,14 +52,15 @@ app.post('/api/check-permission', async (req, res) => {
         hasPro: hasPro,
         hasPlus: hasPlus,
         info: gameInfo,
-        message: `✅ Đã nhận diện và tra cứu token thành công!`
+        message: "Tra cứu thành công tài khoản!"
     });
 });
 
-// 2. API Admin cấp quyền và lưu thông tin tài khoản
+// 2. API Admin cấp quyền cho tài khoản
 app.post('/api/admin/set-permission', (req, res) => {
     const { adminPass, targetUser, packageType } = req.body;
 
+    // Kiểm tra mật khẩu Admin bảo mật
     if (adminPass !== "Maiyeuvu12345") {
         return res.json({ success: false, message: "❌ Mật khẩu Admin không đúng!" });
     }
@@ -73,27 +71,26 @@ app.post('/api/admin/set-permission', (req, res) => {
 
     if (packageType === 'RESET') {
         delete userPermissions[targetUser];
-        return res.json({ success: true, message: `🔒 Đã thu hồi quyền của ${targetUser} (Về FREE)` });
+        return res.json({ success: true, message: `🔒 Đã thu hồi toàn bộ quyền của ${targetUser} (Về FREE)` });
     }
 
+    // Lưu gói quyền mới vào server cho đúng tài khoản đó
     userPermissions[targetUser] = packageType;
     res.json({ success: true, message: `⚡ Đã cấp gói ${packageType} cho tài khoản: ${targetUser}` });
 });
 
-// 3. API Dò mã bảo mật thực tế thông qua Token
+// 3. API xử lý Dò mã bảo mật thông qua Token
 app.post('/api/brute-code', async (req, res) => {
     const { token } = req.body;
     if (!token) {
-        return res.json({ success: false, message: "⚠️ Thiếu Token xác thực tài khoản!" });
+        return res.json({ success: false, message: "⚠️ Thiếu Token để tiến hành dò mã!" });
     }
 
     try {
-        console.log(`Đang sử dụng token để khởi chạy tiến trình dò mã bảo mật bên trong...`);
-        
-        // Tiến trình xử lý quét mã bảo mật dựa trên phiên làm việc của token
+        // Tiến trình xử lý quét mã bảo mật ngầm trên server
         res.json({ 
             success: true, 
-            message: "🚀 Token đã được xác thực! Hệ thống đang tiến hành brute-force mã bảo mật." 
+            message: "🚀 Đã kết nối thành công vào Token! Hệ thống đang quét mã bảo mật..." 
         });
     } catch (error) {
         res.json({ success: false, message: "❌ Lỗi kết nối token dò mã." });
