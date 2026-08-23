@@ -111,7 +111,6 @@
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
     <div class="card pro-feature locked" onclick="dungChucNang('Spam Log', 'PRO')"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
-    <!-- Đã sửa thành gói PLUS chuẩn xác -->
     <div class="card plus-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PLUS')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
     <div class="card plus-feature locked" onclick="dungChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
 
@@ -131,6 +130,7 @@
         let bruteInterval;
         let hasPro = false;  
         let hasPlus = false; 
+        let currentLoggedUser = ""; 
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -164,13 +164,56 @@
             }
         }
 
-        function checkToken() {
+        async function checkToken() {
             let val = document.getElementById('tokenInput').value.trim();
-            if(val === "") hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
-            else hienToast("Đang kết nối hệ thống kiểm tra...");
+            if(val === "") {
+                hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
+                return;
+            }
+
+            currentLoggedUser = val;
+            hienToast("Đang kết nối hệ thống kiểm tra quyền...");
+
+            try {
+                let response = await fetch('/api/check-permission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier: val })
+                });
+                let data = await response.json();
+
+                if (data.success) {
+                    hasPro = data.hasPro;
+                    hasPlus = data.hasPlus;
+
+                    let proElements = document.querySelectorAll('.pro-feature');
+                    let plusElements = document.querySelectorAll('.plus-feature');
+
+                    proElements.forEach(el => {
+                        if (hasPro) el.classList.remove('locked');
+                        else el.classList.add('locked');
+                    });
+
+                    plusElements.forEach(el => {
+                        if (hasPlus) el.classList.remove('locked');
+                        else el.classList.add('locked');
+                    });
+
+                    let currentText = data.package;
+                    document.getElementById('currentStatusBadge').innerText = currentText;
+                    hienToast(`✅ Đã xác thực! Quyền của bạn: ${currentText}`);
+                }
+            } catch (error) {
+                hienToast("❌ Lỗi kết nối đến server!");
+            }
         }
 
         function dungChucNang(tenChucNang, loaiYeuCau) {
+            if (!currentLoggedUser) {
+                hienToast("⚠️ Vui lòng nhập UID/Token ở ô bên trên và bấm 'Check Ngay' trước!");
+                return;
+            }
+
             if (loaiYeuCau === 'PRO' || loaiYeuCau === 'PRO_EMAIL' || loaiYeuCau === 'BRUTE') {
                 if (!hasPro) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PRO!"); return; }
             }
@@ -191,18 +234,11 @@
                 return;
             }
 
-            let userToken = prompt("Vui lòng nhập UID hoặc Token để sử dụng [" + tenChucNang + "]:");
-            if (userToken !== null && userToken.trim() !== "") {
-                hienToast("Đang xử lý " + tenChucNang + "...");
-                setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
-            } else if (userToken !== null) {
-                hienToast("Bạn chưa nhập Token/UID!");
-            }
+            hienToast("Đang xử lý " + tenChucNang + "...");
+            setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
         }
 
         function xuLyThemEmail3Buoc() {
-            let token = prompt("[Bước 1/3] Nhập UID hoặc Token tài khoản:");
-            if (!token) return;
             let emailMoi = prompt("[Bước 1/3] Nhập địa chỉ Gmail muốn gắn vào tài khoản:");
             if (!emailMoi) return;
 
@@ -230,26 +266,23 @@
         }
 
         function chayDoMaBaoMat() {
-            let userToken = prompt("Nhập UID hoặc Token mail xác thực cần dò mã bảo mật:");
-            if (userToken !== null && userToken.trim() !== "") {
-                document.getElementById('bruteModal').style.display = 'flex';
-                let currentNum = 0;
-                
-                bruteInterval = setInterval(function() {
-                    currentNum += Math.floor(Math.random() * 457) + 189;
-                    if (currentNum > 999999) {
-                        currentNum = 999999;
-                        clearInterval(bruteInterval);
-                        document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
-                        setTimeout(() => {
-                            document.getElementById('bruteModal').style.display = 'none';
-                            hienToast("🎉 Dò mã bảo mật thành công: 982731");
-                        }, 1500);
-                    } else {
-                        document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
-                    }
-                }, 25);
-            }
+            document.getElementById('bruteModal').style.display = 'flex';
+            let currentNum = 0;
+            
+            bruteInterval = setInterval(function() {
+                currentNum += Math.floor(Math.random() * 457) + 189;
+                if (currentNum > 999999) {
+                    currentNum = 999999;
+                    clearInterval(bruteInterval);
+                    document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
+                    setTimeout(() => {
+                        document.getElementById('bruteModal').style.display = 'none';
+                        hienToast("🎉 Dò mã bảo mật thành công: 982731");
+                    }, 1500);
+                } else {
+                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
+                }
+            }, 25);
         }
 
         function huyDoMa() {
@@ -258,48 +291,32 @@
             hienToast("Đã huỷ quá trình dò mã!");
         }
 
-        function capQuyenTaiKhoan() {
+        async function capQuyenTaiKhoan() {
             let user = document.getElementById('targetUser').value.trim();
             let pkg = document.getElementById('packageType').value;
             
-            if(user !== "") {
-                let proElements = document.querySelectorAll('.pro-feature');
-                let plusElements = document.querySelectorAll('.plus-feature');
+            if(user === "") {
+                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
+                return;
+            }
 
-                hasPro = false;
-                hasPlus = false;
-                proElements.forEach(el => el.classList.add('locked'));
-                plusElements.forEach(el => el.classList.add('locked'));
+            try {
+                let response = await fetch('/api/admin/set-permission', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        adminPass: "Maiyeuvu12345",
+                        targetUser: user,
+                        packageType: pkg
+                    })
+                });
+                let data = await response.json();
+                hienToast(data.message);
 
-                if (pkg === 'PRO') {
-                    hasPro = true;
-                    proElements.forEach(el => el.classList.remove('locked'));
-                    hienToast("⚡ Đã cấp riêng Gói PRO cho: " + user);
-                } else if (pkg === 'PLUS') {
-                    hasPlus = true;
-                    plusElements.forEach(el => el.classList.remove('locked'));
-                    hienToast("⚡ Đã cấp riêng Gói PLUS cho: " + user);
-                } else if (pkg === 'BOTH') {
-                    hasPro = true;
-                    hasPlus = true;
-                    proElements.forEach(el => el.classList.remove('locked'));
-                    plusElements.forEach(el => el.classList.remove('locked'));
-                    hienToast("⚡ Đã cấp cả PRO & PLUS cho: " + user);
-                } else if (pkg === 'RESET') {
-                    hienToast("🔒 Đã hạ tài khoản về FREE (Thu hồi toàn bộ quyền)");
+                if (user === currentLoggedUser) {
+                    checkToken();
                 }
 
-                let currentText = "FREE";
-                if (hasPro && hasPlus) currentText = "PRO & PLUS";
-                else if (hasPro) currentText = "PRO";
-                else if (hasPlus) currentText = "PLUS";
-
-                document.getElementById('currentStatusBadge').innerText = currentText;
                 document.getElementById('targetUser').value = "";
-            } else {
-                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
-            }
-        }
-    </script>
-</body>
-</html>
+            } catch (error) {
+                hienToas
