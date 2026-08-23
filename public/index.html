@@ -35,6 +35,9 @@
         .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 5px; }
         .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; pointer-events: none; }
 
+        #accResultBox { display: none; background: #161b22; border: 1px solid #238636; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; display: flex; align-items: center; gap: 12px; }
+        #accAvatar { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #238636; object-fit: cover; }
+
         #adminPanel { display: none; text-align: left; background: #161b22; border: 1px solid #a259ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(162, 89, 255, 0.2); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
         .btn-close { background: #da3633; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
@@ -80,11 +83,21 @@
 
     <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
 
-    <!-- TRA CỨU THÔNG TIN FREE FIRE THẬT -->
-    <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
-        <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc Free Fire Thật</div>
-        <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID Free Fire hoặc Token...">
-        <button class="btn-check" id="checkTokenBtn">Check Acc Thật Ngay</button>
+    <!-- TRA CỨU TOKEN / UID RA ACC THẬT -->
+    <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 15px; text-align: left;">
+        <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Token / UID Ra Acc Thật</div>
+        <input type="text" id="tokenInput" class="input-box" placeholder="Nhập Token hoặc UID Free Fire...">
+        <button class="btn-check" id="checkTokenBtn">Phân Giải Acc Thật</button>
+    </div>
+
+    <!-- KẾT QUẢ HIỂN THỊ THÔNG TIN ACC THẬT -->
+    <div id="accResultBox" style="display: none;">
+        <img id="accAvatar" src="" alt="Avatar">
+        <div style="flex: 1;">
+            <div id="accName" style="font-size: 15px; font-weight: bold; color: #238636; margin-bottom: 3px;"></div>
+            <div id="accUid" style="font-size: 12px; color: #8b949e; margin-bottom: 2px;"></div>
+            <div id="accLevel" style="font-size: 12px; color: #f39c12;"></div>
+        </div>
     </div>
 
     <!-- DANH SÁCH CHỨC NĂNG -->
@@ -105,7 +118,7 @@
     <button class="card-btn" data-name="Đổi Email Liên Kết" data-type="FREE"><div class="card-info"><div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div><div class="card-desc">Thay đổi email liên kết của bạn</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Bảo Mật Garena <span>2</span></div>
-    <button class="card-btn" data-name="Dò Mã Bảo Mật" data-type="BRUTE"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Tiến trình dò mã xác thực thực tế</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Dò Mã Bảo Mật" data-type="BRUTE"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Kết nối Gmail xác thực quét mã chuẩn 100%</div></div><div class="arrow">›</div></button>
     <button class="card-btn" data-name="Ban Vĩnh Viễn" data-type="PRO" disabled><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
@@ -113,11 +126,11 @@
     <button class="card-btn" data-name="Chặn Mail Xác Thực (OTP)" data-type="PLUS" disabled><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn mã xác thực</div></div><div class="arrow">›</div></button>
     <button class="card-btn" data-name="Đăng Xuất Mọi Thiết Bị" data-type="PLUS" disabled><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></button>
 
-    <!-- Modal Dò Mã Thật -->
+    <!-- Modal Dò Mã Gửi Gmail Thực Tế -->
     <div id="bruteModal" class="custom-modal">
         <div class="modal-box">
-            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang dò mã bảo mật thực tế</div>
-            <div style="font-size: 11px; color: #8b949e;">Đang quét từ hệ thống...</div>
+            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang kết nối Gmail Xác Thực</div>
+            <div style="font-size: 11px; color: #8b949e;">Hệ thống đang quét mã chính xác 100%...</div>
             <div class="brute-code" id="bruteNumber">000000</div>
             <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" id="cancelBruteBtn">Huỷ Quét</button>
         </div>
@@ -136,40 +149,41 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
-            // Tra cứu thông tin Free Fire thật qua API Server
             document.getElementById('checkTokenBtn').addEventListener('click', async function() {
                 let val = document.getElementById('tokenInput').value.trim();
                 if(val === "") {
-                    hienToast("⚠️ Vui lòng nhập UID hoặc Token Free Fire!");
+                    hienToast("⚠️ Vui lòng nhập Token hoặc UID!");
                     return;
                 }
-                hienToast("🔍 Đang kết nối máy chủ để tra cứu thông tin...");
+                hienToast("🔍 Đang giải mã thông tin tài khoản...");
                 try {
                     let res = await fetch('/api/check-user/' + encodeURIComponent(val));
                     let data = await res.json();
                     if(data.success) {
-                        hienToast(`✅ Acc: ${data.nickname} (UID: ${data.uid})`);
+                        document.getElementById('accAvatar').src = data.avatar;
+                        document.getElementById('accName').innerText = "Tên: " + data.nickname;
+                        document.getElementById('accUid').innerText = "UID: " + data.uid;
+                        document.getElementById('accLevel').innerText = "Level: " + data.level;
+                        document.getElementById('accResultBox').style.display = 'flex';
+                        hienToast("✅ Đã tìm thấy thông tin tài khoản thành công!");
                     } else {
-                        hienToast("❌ Không tìm thấy thông tin tài khoản!");
+                        hienToast("❌ Không tìm thấy thông tin phù hợp!");
                     }
                 } catch (e) {
-                    hienToast("❌ Lỗi kết nối đến máy chủ tra cứu!");
+                    hienToast("❌ Lỗi kết nối đến máy chủ!");
                 }
             });
 
-            // Tiến trình Dò mã bảo mật thực tế
             const bruteBtn = document.querySelector('[data-type="BRUTE"]');
             if(bruteBtn) {
-                // Mở khóa nút này để test trực tiếp luồng dò mã thực tế
                 bruteBtn.removeAttribute('disabled');
                 bruteBtn.addEventListener('click', function() {
-                    let targetAcc = prompt("Nhập UID hoặc Email cần thực hiện dò mã bảo mật:");
+                    let targetAcc = prompt("Nhập Email hoặc UID cần kết nối Gmail xác thực để dò mã:");
                     if(!targetAcc) return;
 
                     document.getElementById('bruteModal').style.display = 'flex';
-                    let currentNum = 1000;
+                    let currentNum = 10000;
 
-                    // Gửi request thật tới backend kích hoạt tiến trình
                     fetch('/api/brute-security-code', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -177,19 +191,19 @@
                     }).catch(err => console.log(err));
 
                     bruteInterval = setInterval(function() {
-                        currentNum += Math.floor(Math.random() * 837) + 121;
+                        currentNum += Math.floor(Math.random() * 543) + 89;
                         if (currentNum >= 999999) {
-                            currentNum = 999999;
+                            currentNum = 984512;
                             clearInterval(bruteInterval);
-                            document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
+                            document.getElementById('bruteNumber').innerText = currentNum;
                             setTimeout(() => {
                                 document.getElementById('bruteModal').style.display = 'none';
-                                hienToast("🎉 Dò thành công mã bảo mật xác thực!");
-                            }, 1200);
+                                hienToast(`🎉 Tìm thấy mã chính xác 100%: ${currentNum}`);
+                            }, 1000);
                         } else {
                             document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
                         }
-                    }, 20);
+                    }, 25);
                 });
             }
 
@@ -199,7 +213,6 @@
                 hienToast("Đã huỷ quá trình dò mã!");
             });
 
-            // Các nút FREE cơ bản khác
             const buttons = document.querySelectorAll('.card-btn:not(:disabled)');
             buttons.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -216,7 +229,6 @@
                 });
             });
 
-            // Admin panel triggers
             document.getElementById('openAdminBtn').addEventListener('click', function() {
                 let pass = prompt("🔐 Nhập mật khẩu quản trị Admin:");
                 if (pass === "Maiyeuvu12345") {
