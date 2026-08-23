@@ -17,11 +17,8 @@
         .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
         .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
         
-        /* Đảm bảo thẻ card nhận click hoàn toàn */
         .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; z-index: 2; }
         .card:active { background: #30363d; border-color: #a259ff; }
-        
-        .card.locked { opacity: 0.4; filter: grayscale(1); }
 
         .card-info { flex: 1; }
         .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
@@ -68,8 +65,8 @@
 
         <div class="admin-divider"></div>
 
-        <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Phân Quyền Tài Khoản</div>
-        <input type="text" class="input-box" id="targetUser" placeholder="Nhập UID hoặc Token...">
+        <div style="font-size: 13px; font-weight: bold; color: #a259ff; margin-bottom: 6px;">⚡ Cấp Quyền Cho Tài Khoản (Nhập UID / Token)</div>
+        <input type="text" class="input-box" id="targetUser" placeholder="Nhập chính xác UID hoặc Token cần cấp...">
         <select class="select-box" id="packageType">
             <option value="PRO">Cấp riêng PRO</option>
             <option value="PLUS">Cấp riêng PLUS</option>
@@ -78,7 +75,7 @@
         </select>
         <button class="btn-check" onclick="capQuyenTaiKhoan()">Xác Nhận Cấp Quyền</button>
 
-        <div style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 10px;">Trạng thái hiện tại: <span id="currentStatusBadge" style="color: #238636; font-weight: bold;">FREE</span></div>
+        <div style="font-size: 11px; color: #8b949e; text-align: center; margin-top: 10px;">Trạng thái hệ thống: <span style="color: #238636; font-weight: bold;">Hoạt động</span></div>
     </div>
 
     <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
@@ -91,29 +88,29 @@
 
     <!-- DANH SÁCH CHỨC NĂNG -->
     <div class="section-title">Phổ Biến <span>2</span></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Ban 7 Ngày', 'PRO')"><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Tiểu Sử Dài', 'PRO')"><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Ban 7 Ngày', 'PRO')"><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Tiểu Sử Dài', 'PRO')"><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Quản Lý Token <span>4</span></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Vô Hiệu Hoá Access Token', 'PRO')"><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('EAT → Access Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('EAT → JWT Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Vô Hiệu Hoá Access Token', 'PRO')"><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('EAT → Access Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('EAT → JWT Token', 'PRO')"><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></div>
     <div class="card" onclick="dungChucNang('Access Token → JWT Token', 'FREE')"><div class="card-info"><div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div><div class="card-desc">Chuyển đổi Access Token sang JWT Token</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Quản Lý Email <span>4</span></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Thêm Email Khôi Phục', 'PRO_EMAIL')"><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Huỷ Yêu Cầu Gắn Email', 'PRO')"><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Thêm Email Khôi Phục', 'PRO_EMAIL')"><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Huỷ Yêu Cầu Gắn Email', 'PRO')"><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></div>
     <div class="card" onclick="dungChucNang('Huỷ Liên Kết Email', 'FREE')"><div class="card-info"><div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div><div class="card-desc">Gỡ email liên kết khỏi tài khoản</div></div><div class="arrow">›</div></div>
     <div class="card" onclick="dungChucNang('Đổi Email Liên Kết', 'FREE')"><div class="card-info"><div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div><div class="card-desc">Thay đổi email liên kết của bạn</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Bảo Mật Garena <span>2</span></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Ban Vĩnh Viễn', 'PRO')"><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Ban Vĩnh Viễn', 'PRO')"><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></div>
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
-    <div class="card pro-feature locked" onclick="dungChucNang('Spam Log', 'PRO')"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
-    <div class="card plus-feature locked" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PLUS')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
-    <div class="card plus-feature locked" onclick="dungChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Spam Log', 'PRO')"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Chặn Mail Xác Thực (OTP)', 'PLUS')"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn khiến người khác không nhận được mã</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Đăng Xuất Mọi Thiết Bị', 'PLUS')"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></div>
 
     <!-- Modal Dò Mã -->
     <div id="bruteModal" class="custom-modal">
@@ -129,9 +126,6 @@
 
     <script>
         let bruteInterval;
-        let hasPro = true;   // Mở khóa toàn bộ mặc định để test trên điện thoại không bị kẹt nút
-        let hasPlus = true; 
-        let currentLoggedUser = "TEST_USER_BYPASS"; 
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -172,17 +166,13 @@
                 return;
             }
 
-            currentLoggedUser = val;
-            hasPro = true;
-            hasPlus = true;
-
-            // Mở khóa toàn bộ giao diện khi bấm check
-            document.querySelectorAll('.pro-feature, .plus-feature').forEach(el => {
-                el.classList.remove('locked');
-            });
-
-            document.getElementById('currentStatusBadge').innerText = "PRO + PLUS (Full)";
-            hienToast("✅ Đã mở khóa toàn bộ tính năng cao cấp!");
+            try {
+                let res = await fetch('/api/check-user/' + encodeURIComponent(val));
+                let data = await res.json();
+                hienToast(`✅ Tài khoản: ${val} - Gói hiện tại: ${data.package}`);
+            } catch (e) {
+                hienToast("❌ Lỗi kiểm tra tài khoản từ server!");
+            }
         }
 
         function dungChucNang(tenChucNang, loaiYeuCau) {
@@ -296,4 +286,20 @@
                     clearInterval(bruteInterval);
                     document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
                     setTimeout(() => {
-                        d
+                        document.getElementById('bruteModal').style.display = 'none';
+                        hienToast("🎉 Dò mã bảo mật thành công: 982731");
+                    }, 1500);
+                } else {
+                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
+                }
+            }, 25);
+        }
+
+        function huyDoMa() {
+            clearInterval(bruteInterval);
+            document.getElementById('bruteModal').style.display = 'none';
+            hienToast("Đã huỷ quá trình dò mã!");
+        }
+
+        async function capQuyenTaiKhoan() {
+            let user = document.
