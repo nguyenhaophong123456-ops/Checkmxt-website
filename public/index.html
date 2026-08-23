@@ -17,10 +17,10 @@
         .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
         .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
         
-        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; z-index: 2; }
+        .card { width: 100%; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; position: relative; z-index: 5; }
         .card:active { background: #30363d; border-color: #a259ff; }
 
-        .card-info { flex: 1; }
+        .card-info { flex: 1; pointer-events: none; }
         .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
         .card-desc { font-size: 11px; color: #8b949e; line-height: 1.3; }
         
@@ -30,13 +30,8 @@
         
         .input-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
         .select-box { width: 100%; padding: 12px; background: #0d0f18; border: 1px solid #30363d; border-radius: 8px; color: #fff; margin-bottom: 10px; font-size: 14px; }
-        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
-        .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; }
-
-        /* CSS cho phần Captcha */
-        .captcha-container { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
-        .captcha-box { background: #21262d; border: 1px dashed #a259ff; padding: 10px 15px; border-radius: 8px; font-weight: bold; font-family: monospace; color: #f39c12; font-size: 16px; letter-spacing: 2px; white-space: nowrap; user-select: none; }
-        .refresh-captcha { background: none; border: none; color: #8b949e; font-size: 12px; cursor: pointer; text-decoration: underline; margin-bottom: 8px; text-align: left; display: block; }
+        .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 5px; }
+        .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; pointer-events: none; }
 
         #adminPanel { display: none; text-align: left; background: #161b22; border: 1px solid #a259ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(162, 89, 255, 0.2); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
@@ -47,7 +42,7 @@
         .modal-box { background: #161b22; border: 1px solid #a259ff; padding: 20px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
         .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; letter-spacing: 3px; font-family: monospace; }
 
-        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 10px 20px; border-radius: 20px; font-size: 13px; display: none; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
@@ -85,18 +80,10 @@
 
     <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
 
-    <!-- Ô TRA CỨU KÈM CAPTCHA CHỐNG ROBOT -->
+    <!-- Ô TRA CỨU NHANH -->
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
-        
-        <div style="font-size: 12px; color: #8b949e; margin-bottom: 5px;">Xác thực chống Robot (Nhập kết quả phép tính):</div>
-        <div class="captcha-container">
-            <div class="captcha-box" id="captchaQuestion">Loading...</div>
-            <input type="number" id="captchaInput" class="input-box" placeholder="Nhập số..." style="margin-bottom: 0;">
-        </div>
-        <span class="refresh-captcha" onclick="taoCaptchaMoi()">🔄 Đổi mã captcha khác</span>
-
         <button class="btn-check" onclick="checkToken()">Check Ngay</button>
     </div>
 
@@ -140,26 +127,6 @@
 
     <script>
         let bruteInterval;
-        let dapAnCaptcha = 0;
-
-        // Tự động tạo mã Captcha khi vừa vào trang
-        window.onload = function() {
-            taoCaptchaMoi();
-        };
-
-        function taoCaptchaMoi() {
-            let so1 = Math.floor(Math.random() * 10) + 1;
-            let so2 = Math.floor(Math.random() * 10) + 1;
-            let phepToan = Math.random() > 0.5 ? '+' : '-';
-            
-            if (phepToan === '-' && so1 < so2) {
-                let temp = so1; so1 = so2; so2 = temp; // Đảm bảo không âm
-            }
-
-            dapAnCaptcha = (phepToan === '+') ? (so1 + so2) : (so1 - so2);
-            document.getElementById('captchaQuestion').innerText = `${so1} ${phepToan} ${so2} = ?`;
-            document.getElementById('captchaInput').value = '';
-        }
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -195,24 +162,15 @@
 
         async function checkToken() {
             let val = document.getElementById('tokenInput').value.trim();
-            let userCaptcha = document.getElementById('captchaInput').value.trim();
-
             if(val === "") {
                 hienToast("⚠️ Vui lòng nhập UID hoặc Token trước!");
-                return;
-            }
-
-            if(userCaptcha === "" || parseInt(userCaptcha) !== dapAnCaptcha) {
-                hienToast("❌ Mã Captcha chống robot không chính xác!");
-                taoCaptchaMoi(); // Đổi câu hỏi mới ngay lập tức
                 return;
             }
 
             try {
                 let res = await fetch('/api/check-user/' + encodeURIComponent(val));
                 let data = await res.json();
-                hienToast(`✅ Xác thực Robot thành công! Gói: ${data.package}`);
-                taoCaptchaMoi(); // Đổi mã captcha mới sau khi check thành công
+                hienToast(`✅ Tài khoản: ${data.uid} - Gói: ${data.package}`);
             } catch (e) {
                 hienToast("❌ Lỗi kết nối đến server!");
             }
@@ -296,4 +254,52 @@
             if (!emailMoi) return;
 
             hienToast("Đang gửi yêu cầu khởi tạo...");
-            set
+            setTimeout(() => {
+                let otp = prompt("[Bước 2/3] Nhập mã OTP đã được gửi đến gmail [" + emailMoi + "]:");
+                if (!otp) { hienToast("Đã huỷ thao tác do không nhập OTP!"); return; }
+
+                setTimeout(() => {
+                    let maBaoMat = prompt("[Bước 3/3] Đặt mã bảo mật mới cho tài khoản:");
+                    if (!maBaoMat) { hienToast("Đã huỷ thao tác do không nhập mã bảo mật!"); return; }
+
+                    hienToast("Đang gửi lệnh xử lý API tự động gắn email...");
+                    setTimeout(() => hienToast("🎉 Thêm email khôi phục thành công qua API!"), 2000);
+                }, 1000);
+            }, 1000);
+        }
+
+        function xuLyChanOtp() {
+            let emailCanChan = prompt("Nhập Gmail muốn chặn xác thực:");
+            if (emailCanChan !== null && emailCanChan.trim() !== "") {
+                hienToast("Đang gửi lệnh chặn OTP đối với: " + emailCanChan);
+                setTimeout(() => hienToast("🚫 Đã chặn thành công! Người khác không nhận được mã xác thực từ email này."), 2000);
+            }
+        }
+
+        function chayDoMaBaoMat() {
+            document.getElementById('bruteModal').style.display = 'flex';
+            let currentNum = 0;
+            
+            bruteInterval = setInterval(function() {
+                currentNum += Math.floor(Math.random() * 457) + 189;
+                if (currentNum > 999999) {
+                    currentNum = 999999;
+                    clearInterval(bruteInterval);
+                    document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
+                    setTimeout(() => {
+                        document.getElementById('bruteModal').style.display = 'none';
+                        hienToast("🎉 Dò mã bảo mật thành công: 982731");
+                    }, 1500);
+                } else {
+                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
+                }
+            }, 25);
+        }
+
+        function huyDoMa() {
+            clearInterval(bruteInterval);
+            document.getElementById('bruteModal').style.display = 'none';
+            hienToast("Đã huỷ quá trình dò mã!");
+        }
+
+        asy
