@@ -5,40 +5,50 @@ const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-// 1. API Tra cứu thông tin Free Fire thật từ UID/Token
-app.get('/api/check-user/:token', async (req, res) => {
-    let tokenOrUid = req.params.token;
-    try {
-        let response = await axios.get(`https://api.freefireinfo.vn/check?uid=${encodeURIComponent(tokenOrUid)}`, { timeout: 6000 })
-            .catch(() => null);
+// Thay API Key của bạn vào đây
+const API_KEY = 'YOUR_API_KEY'; 
 
-        if (response && response.data && response.data.nickname) {
+app.get('/api/check-user/:input', async (req, res) => {
+    let userInput = req.params.input.trim();
+    let targetUid = userInput;
+
+    try {
+        // Nếu chuỗi nhập vào dài (đặc trưng của Token), ta cần suy ra UID hoặc xử lý giải mã token
+        // (Tuỳ thuộc vào định dạng token của bạn, ví dụ: nếu token chứa UID bên trong hoặc cần gọi api đổi token lấy uid)
+        if (userInput.length > 30) {
+            // Đoạn này giả lập logic trích xuất UID từ Token hoặc gọi API đổi token lấy UID
+            // Ví dụ: targetUid = extractUidFromToken(userInput);
+            // Nếu token dạng cơ bản, bạn có thể tích hợp hàm bóc tách JWT/Access token tại đây.
+            
+            // Tạm thời nếu là token, hệ thống sẽ dùng endpoint giải mã token Garena của bạn (nếu có)
+            // Hoặc nếu API của bạn hỗ trợ truyền token trực tiếp trong header:
+        }
+
+        // Gọi trực tiếp đến API Free Fire bằng UID
+        const url = `https://developers.freefirecommunity.com/api/v1/info?region=sg&uid=${encodeURIComponent(targetUid)}`;
+        
+        let response = await axios.get(url, {
+            headers: {
+                'x-api-key': API_KEY
+            },
+            timeout: 6000
+        });
+
+        if (response && response.data) {
             res.json({
                 success: true,
-                uid: response.data.uid || tokenOrUid,
-                nickname: response.data.nickname,
+                uid: response.data.uid || targetUid,
+                nickname: response.data.nickname || response.data.name || "Không rõ tên",
                 avatar: response.data.avatar || "https://i.imgur.com/3382c7f.png",
                 level: response.data.level || "1"
             });
         } else {
-            res.json({
-                success: true,
-                uid: tokenOrUid,
-                nickname: "Nhân Vật Free Fire",
-                avatar: "https://i.imgur.com/3382c7f.png",
-                level: "65"
-            });
+            res.json({ success: false, message: "Không tìm thấy dữ liệu tài khoản!" });
         }
     } catch (error) {
-        res.status(500).json({ success: false, message: "Lỗi kết nối máy chủ!" });
+        console.error('Lỗi gọi API:', error.message);
+        res.status(500).json({ success: false, message: "Lỗi kết nối hoặc Token/UID không hợp lệ!" });
     }
-});
-
-// 2. API Dò mã bảo mật 
-app.post('/api/brute-security-code', async (req, res) => {
-    let { targetToken } = req.body;
-    console.log(`Đang chạy tiến trình quét mã cho: ${targetToken}`);
-    res.json({ success: true, message: "Đã kích hoạt quét mã thành công!" });
 });
 
 const PORT = process.env.PORT || 3000;
