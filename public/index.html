@@ -33,6 +33,11 @@
         .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 15px; }
         .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; }
 
+        /* CSS cho phần Captcha */
+        .captcha-container { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .captcha-box { background: #21262d; border: 1px dashed #a259ff; padding: 10px 15px; border-radius: 8px; font-weight: bold; font-family: monospace; color: #f39c12; font-size: 16px; letter-spacing: 2px; white-space: nowrap; user-select: none; }
+        .refresh-captcha { background: none; border: none; color: #8b949e; font-size: 12px; cursor: pointer; text-decoration: underline; margin-bottom: 8px; text-align: left; display: block; }
+
         #adminPanel { display: none; text-align: left; background: #161b22; border: 1px solid #a259ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(162, 89, 255, 0.2); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
         .btn-close { background: #da3633; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
@@ -80,9 +85,18 @@
 
     <div class="desc" id="mainDesc">Nền tảng công cụ hỗ trợ tài khoản hàng đầu Việt Nam. Bảo mật và tốc độ cao.</div>
 
+    <!-- Ô TRA CỨU KÈM CAPTCHA CHỐNG ROBOT -->
     <div style="background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left;">
         <div style="font-size: 14px; font-weight: bold; color: #a259ff; margin-bottom: 8px;">🔍 Tra Cứu Thông Tin Acc</div>
         <input type="text" id="tokenInput" class="input-box" placeholder="Nhập UID hoặc Token (EAT/JWT)...">
+        
+        <div style="font-size: 12px; color: #8b949e; margin-bottom: 5px;">Xác thực chống Robot (Nhập kết quả phép tính):</div>
+        <div class="captcha-container">
+            <div class="captcha-box" id="captchaQuestion">Loading...</div>
+            <input type="number" id="captchaInput" class="input-box" placeholder="Nhập số..." style="margin-bottom: 0;">
+        </div>
+        <span class="refresh-captcha" onclick="taoCaptchaMoi()">🔄 Đổi mã captcha khác</span>
+
         <button class="btn-check" onclick="checkToken()">Check Ngay</button>
     </div>
 
@@ -126,6 +140,26 @@
 
     <script>
         let bruteInterval;
+        let dapAnCaptcha = 0;
+
+        // Tự động tạo mã Captcha khi vừa vào trang
+        window.onload = function() {
+            taoCaptchaMoi();
+        };
+
+        function taoCaptchaMoi() {
+            let so1 = Math.floor(Math.random() * 10) + 1;
+            let so2 = Math.floor(Math.random() * 10) + 1;
+            let phepToan = Math.random() > 0.5 ? '+' : '-';
+            
+            if (phepToan === '-' && so1 < so2) {
+                let temp = so1; so1 = so2; so2 = temp; // Đảm bảo không âm
+            }
+
+            dapAnCaptcha = (phepToan === '+') ? (so1 + so2) : (so1 - so2);
+            document.getElementById('captchaQuestion').innerText = `${so1} ${phepToan} ${so2} = ?`;
+            document.getElementById('captchaInput').value = '';
+        }
 
         function hienToast(msg) {
             let t = document.getElementById('toast');
@@ -161,17 +195,26 @@
 
         async function checkToken() {
             let val = document.getElementById('tokenInput').value.trim();
+            let userCaptcha = document.getElementById('captchaInput').value.trim();
+
             if(val === "") {
-                hienToast("Vui lòng nhập UID hoặc Token trước khi check!");
+                hienToast("⚠️ Vui lòng nhập UID hoặc Token trước!");
+                return;
+            }
+
+            if(userCaptcha === "" || parseInt(userCaptcha) !== dapAnCaptcha) {
+                hienToast("❌ Mã Captcha chống robot không chính xác!");
+                taoCaptchaMoi(); // Đổi câu hỏi mới ngay lập tức
                 return;
             }
 
             try {
                 let res = await fetch('/api/check-user/' + encodeURIComponent(val));
                 let data = await res.json();
-                hienToast(`✅ Tài khoản: ${val} - Gói hiện tại: ${data.package}`);
+                hienToast(`✅ Xác thực Robot thành công! Gói: ${data.package}`);
+                taoCaptchaMoi(); // Đổi mã captcha mới sau khi check thành công
             } catch (e) {
-                hienToast("❌ Lỗi kiểm tra tài khoản từ server!");
+                hienToast("❌ Lỗi kết nối đến server!");
             }
         }
 
@@ -253,53 +296,4 @@
             if (!emailMoi) return;
 
             hienToast("Đang gửi yêu cầu khởi tạo...");
-            setTimeout(() => {
-                let otp = prompt("[Bước 2/3] Nhập mã OTP đã được gửi đến gmail [" + emailMoi + "]:");
-                if (!otp) { hienToast("Đã huỷ thao tác do không nhập OTP!"); return; }
-
-                setTimeout(() => {
-                    let maBaoMat = prompt("[Bước 3/3] Đặt mã bảo mật mới cho tài khoản:");
-                    if (!maBaoMat) { hienToast("Đã huỷ thao tác do không nhập mã bảo mật!"); return; }
-
-                    hienToast("Đang gửi lệnh xử lý API tự động gắn email...");
-                    setTimeout(() => hienToast("🎉 Thêm email khôi phục thành công qua API!"), 2000);
-                }, 1000);
-            }, 1000);
-        }
-
-        function xuLyChanOtp() {
-            let emailCanChan = prompt("Nhập Gmail muốn chặn xác thực:");
-            if (emailCanChan !== null && emailCanChan.trim() !== "") {
-                hienToast("Đang gửi lệnh chặn OTP đối với: " + emailCanChan);
-                setTimeout(() => hienToast("🚫 Đã chặn thành công! Người khác không nhận được mã xác thực từ email này."), 2000);
-            }
-        }
-
-        function chayDoMaBaoMat() {
-            document.getElementById('bruteModal').style.display = 'flex';
-            let currentNum = 0;
-            
-            bruteInterval = setInterval(function() {
-                currentNum += Math.floor(Math.random() * 457) + 189;
-                if (currentNum > 999999) {
-                    currentNum = 999999;
-                    clearInterval(bruteInterval);
-                    document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
-                    setTimeout(() => {
-                        document.getElementById('bruteModal').style.display = 'none';
-                        hienToast("🎉 Dò mã bảo mật thành công: 982731");
-                    }, 1500);
-                } else {
-                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
-                }
-            }, 25);
-        }
-
-        function huyDoMa() {
-            clearInterval(bruteInterval);
-            document.getElementById('bruteModal').style.display = 'none';
-            hienToast("Đã huỷ quá trình dò mã!");
-        }
-
-        async function capQuyenTaiKhoan() {
-            let user = document.
+            set
