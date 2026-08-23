@@ -1,12 +1,13 @@
 {
   "name": "checkmxt",
   "version": "1.0.0",
-  "description": "Nền tảng công cụ hoàn chỉnh",
+  "description": "",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
+    "axios": "^1.6.0",
     "express": "^4.19.2"
   }
 }
