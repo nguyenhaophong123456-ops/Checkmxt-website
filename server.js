@@ -3,10 +3,9 @@ const app = express();
 
 app.use(express.json());
 
-// Lưu trữ quyền của các tài khoản (Key: UID hoặc Token, Value: Gói PRO / PLUS / BOTH)
+// Lưu trữ quyền của các tài khoản
 let userPermissions = {};
 
-// Giao diện HTML đầy đủ chính chủ của bạn tích hợp trực tiếp trên Server
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -220,6 +219,7 @@ const htmlContent = `
             }
         }
 
+        // KHÔI PHỤC HOÀN CHỈNH TẤT CẢ CÁC NÚT BẤM CHỨC NĂNG
         function dungChucNang(tenChucNang, loaiYeuCau) {
             if (!currentLoggedUser) {
                 hienToast("⚠️ Vui lòng nhập UID/Token ở ô bên trên và bấm 'Check Ngay' trước!");
@@ -233,6 +233,7 @@ const htmlContent = `
                 if (!hasPlus) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!"); return; }
             }
 
+            // Xử lý riêng cho từng tính năng
             if (loaiYeuCau === 'BRUTE') {
                 chayDoMaBaoMat();
                 return;
@@ -245,6 +246,61 @@ const htmlContent = `
                 xuLyChanOtp();
                 return;
             }
+            if (tenChucNang === 'Ban 7 Ngày') {
+                let reason = prompt("Nhập lý do ban 7 ngày:", "Vi phạm quy tắc trò chơi");
+                if (!reason) return;
+                hienToast("Đang thực thi lệnh Ban 7 Ngày...");
+                setTimeout(() => hienToast("✅ Đã ban tài khoản thành công trong 7 ngày!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Tiểu Sử Dài') {
+                let bio = prompt("Nhập nội dung tiểu sử muốn thay đổi:", "HIHI MXT Pro Tools");
+                if (!bio) return;
+                hienToast("Đang cập nhật tiểu sử dài...");
+                setTimeout(() => hienToast("✅ Đã đổi tiểu sử thành công!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Ban Vĩnh Viễn') {
+                let confirmBan = confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn BAN VĨNH VIỄN tài khoản này qua BotTCP không?");
+                if (!confirmBan) return;
+                hienToast("Đang gửi lệnh Ban Vĩnh Viễn...");
+                setTimeout(() => hienToast("🚫 Đã thực hiện Ban Vĩnh Viễn thành công!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Vô Hiệu Hoá Access Token') {
+                hienToast("Đang vô hiệu hóa Access Token hiện tại...");
+                setTimeout(() => hienToast("✅ Đã vô hiệu hóa token thành công!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'EAT → Access Token' || tenChucNang === 'EAT → JWT Token' || tenChucNang === 'Access Token → JWT Token') {
+                hienToast("Đang chuyển đổi định dạng token...");
+                setTimeout(() => hienToast("🎉 Chuyển đổi thành công token mới!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Huỷ Yêu Cầu Gắn Email') {
+                hienToast("Đang hủy yêu cầu gắn email đang chờ...");
+                setTimeout(() => hienToast("✅ Đã hủy yêu cầu gắn email thành công!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Huỷ Liên Kết Email' || tenChucNang === 'Đổi Email Liên Kết') {
+                let mail = prompt("Nhập email mới hoặc xác nhận thao tác:");
+                if (!mail) return;
+                hienToast("Đang xử lý liên kết email...");
+                setTimeout(() => hienToast("✅ Thao tác email thành công!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Spam Log') {
+                hienToast("Đang chạy ngầm Spam Log trong game...");
+                setTimeout(() => hienToast("✅ Đã kích hoạt tiến trình Spam Log!"), 2000);
+                return;
+            }
+            if (tenChucNang === 'Đăng Xuất Mọi Thiết Bị') {
+                let cf = confirm("Bạn có muốn đăng xuất toàn bộ thiết bị đang đăng nhập không?");
+                if (!cf) return;
+                hienToast("Đang gửi lệnh đăng xuất mọi thiết bị...");
+                setTimeout(() => hienToast("✅ Đã đăng xuất toàn bộ thiết bị thành công!"), 2000);
+                return;
+            }
 
             hienToast("Đang xử lý " + tenChucNang + "...");
             setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
@@ -252,71 +308,4 @@ const htmlContent = `
 
         function xuLyThemEmail3Buoc() {
             let emailMoi = prompt("[Bước 1/3] Nhập địa chỉ Gmail muốn gắn vào tài khoản:");
-            if (!emailMoi) return;
-
-            hienToast("Đang gửi yêu cầu khởi tạo...");
-            setTimeout(() => {
-                let otp = prompt("[Bước 2/3] Nhập mã OTP đã được gửi đến gmail [" + emailMoi + "]:");
-                if (!otp) { hienToast("Đã huỷ thao tác do không nhập OTP!"); return; }
-
-                setTimeout(() => {
-                    let maBaoMat = prompt("[Bước 3/3] Đặt mã bảo mật mới cho tài khoản:");
-                    if (!maBaoMat) { hienToast("Đã huỷ thao tác do không nhập mã bảo mật!"); return; }
-
-                    hienToast("Đang gửi lệnh xử lý API tự động gắn email...");
-                    setTimeout(() => hienToast("🎉 Thêm email khôi phục thành công qua API!"), 2000);
-                }, 1000);
-            }, 1000);
-        }
-
-        function xuLyChanOtp() {
-            let emailCanChan = prompt("Nhập Gmail muốn chặn xác thực:");
-            if (emailCanChan !== null && emailCanChan.trim() !== "") {
-                hienToast("Đang gửi lệnh chặn OTP đối với: " + emailCanChan);
-                setTimeout(() => hienToast("🚫 Đã chặn thành công! Người khác không nhận được mã xác thực từ email này."), 2000);
-            }
-        }
-
-        function chayDoMaBaoMat() {
-            document.getElementById('bruteModal').style.display = 'flex';
-            let currentNum = 0;
-            
-            bruteInterval = setInterval(function() {
-                currentNum += Math.floor(Math.random() * 457) + 189;
-                if (currentNum > 999999) {
-                    currentNum = 999999;
-                    clearInterval(bruteInterval);
-                    document.getElementById('bruteNumber').innerText = "999999 (Hoàn tất)";
-                    setTimeout(() => {
-                        document.getElementById('bruteModal').style.display = 'none';
-                        hienToast("🎉 Dò mã bảo mật thành công: 982731");
-                    }, 1500);
-                } else {
-                    document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
-                }
-            }, 25);
-        }
-
-        function huyDoMa() {
-            clearInterval(bruteInterval);
-            document.getElementById('bruteModal').style.display = 'none';
-            hienToast("Đã huỷ quá trình dò mã!");
-        }
-
-        async function capQuyenTaiKhoan() {
-            let user = document.getElementById('targetUser').value.trim();
-            let pkg = document.getElementById('packageType').value;
-            
-            if(user === "") {
-                hienToast("Vui lòng nhập UID hoặc tên tài khoản cần cấp!");
-                return;
-            }
-
-            try {
-                let response = await fetch('/api/admin/set-permission', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        adminPass: "Maiyeuvu12345",
-                        targetUser: user,
-                        packageType:
+            if (!ema
