@@ -219,7 +219,6 @@ const htmlContent = `
             }
         }
 
-        // KHÔI PHỤC HOÀN CHỈNH TẤT CẢ CÁC NÚT BẤM CHỨC NĂNG
         function dungChucNang(tenChucNang, loaiYeuCau) {
             if (!currentLoggedUser) {
                 hienToast("⚠️ Vui lòng nhập UID/Token ở ô bên trên và bấm 'Check Ngay' trước!");
@@ -233,7 +232,6 @@ const htmlContent = `
                 if (!hasPlus) { hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!"); return; }
             }
 
-            // Xử lý riêng cho từng tính năng
             if (loaiYeuCau === 'BRUTE') {
                 chayDoMaBaoMat();
                 return;
@@ -308,4 +306,8 @@ const htmlContent = `
 
         function xuLyThemEmail3Buoc() {
             let emailMoi = prompt("[Bước 1/3] Nhập địa chỉ Gmail muốn gắn vào tài khoản:");
-            if (!ema
+            if (!emailMoi) return;
+
+            hienToast("Đang gửi yêu cầu khởi tạo...");
+            setTimeout(() => {
+     
