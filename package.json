@@ -1,0 +1,12 @@
+{
+  "name": "hihimxt-tool",
+  "version": "1.0.0",
+  "description": "Tool tra cuu va quan ly tai khoan",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
