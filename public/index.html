@@ -35,7 +35,17 @@
         .btn-check { display: block; width: 100%; padding: 12px; background: linear-gradient(90deg, #a259ff, #6c5ce7); color: #fff; border: none; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 5px; }
         .arrow { color: #8b949e; font-size: 16px; font-weight: bold; padding-left: 8px; pointer-events: none; }
 
-        #accResultBox { display: none; background: #161b22; border: 1px solid #238636; border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: left; display: flex; align-items: center; gap: 12px; }
+        #accResultBox { 
+            display: none; 
+            background: #161b22; 
+            border: 1px solid #238636; 
+            border-radius: 12px; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            text-align: left; 
+            align-items: center; 
+            gap: 12px; 
+        }
         #accAvatar { width: 55px; height: 55px; border-radius: 50%; border: 2px solid #238636; object-fit: cover; }
 
         #adminPanel { display: none; text-align: left; background: #161b22; border: 1px solid #a259ff; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(162, 89, 255, 0.2); }
@@ -91,7 +101,7 @@
     </div>
 
     <!-- KẾT QUẢ HIỂN THỊ THÔNG TIN ACC THẬT -->
-    <div id="accResultBox" style="display: none;">
+    <div id="accResultBox">
         <img id="accAvatar" src="" alt="Avatar">
         <div style="flex: 1;">
             <div id="accName" style="font-size: 15px; font-weight: bold; color: #238636; margin-bottom: 3px;"></div>
@@ -149,6 +159,7 @@
         }
 
         document.addEventListener("DOMContentLoaded", function() {
+            // ========== LẮNG NGHE CHECK TOKEN ==========
             document.getElementById('checkTokenBtn').addEventListener('click', async function() {
                 let val = document.getElementById('tokenInput').value.trim();
                 if(val === "") {
@@ -157,45 +168,51 @@
                 }
                 hienToast("🔍 Đang giải mã thông tin tài khoản...");
                 try {
+                    // Gọi API backend của bạn trên Render
                     let res = await fetch('/api/check-user/' + encodeURIComponent(val));
                     let data = await res.json();
                     if(data.success) {
-                        document.getElementById('accAvatar').src = data.avatar;
-                        document.getElementById('accName').innerText = "Tên: " + data.nickname;
-                        document.getElementById('accUid').innerText = "UID: " + data.uid;
-                        document.getElementById('accLevel').innerText = "Level: " + data.level;
+                        document.getElementById('accAvatar').src = data.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(data.nickname || 'User');
+                        document.getElementById('accName').innerText = "Tên: " + (data.nickname || 'Không xác định');
+                        document.getElementById('accUid').innerText = "UID: " + (data.uid || val);
+                        document.getElementById('accLevel').innerText = "Level: " + (data.level || 'N/A');
                         document.getElementById('accResultBox').style.display = 'flex';
                         hienToast("✅ Đã tìm thấy thông tin tài khoản thành công!");
                     } else {
-                        hienToast("❌ Không tìm thấy thông tin phù hợp!");
+                        hienToast("❌ " + (data.message || "Không tìm thấy thông tin phù hợp!"));
+                        document.getElementById('accResultBox').style.display = 'none';
                     }
                 } catch (e) {
-                    hienToast("❌ Lỗi kết nối đến máy chủ!");
+                    hienToast("❌ Lỗi kết nối đến máy chủ! Kiểm tra backend.");
+                    document.getElementById('accResultBox').style.display = 'none';
                 }
             });
 
-            const bruteBtn = document.querySelector('[data-type="BRUTE"]');
+            // ========== NÚT DÒ MÃ BẢO MẬT (DEMO) ==========
+            const bruteBtn = document.querySelector('[data-name="Dò Mã Bảo Mật"]');
             if(bruteBtn) {
                 bruteBtn.removeAttribute('disabled');
                 bruteBtn.addEventListener('click', function() {
                     let targetAcc = prompt("Nhập Email hoặc UID cần kết nối Gmail xác thực để dò mã:");
-                    if(!targetAcc) return;
+                    if(!targetAcc || targetAcc.trim() === "") return;
 
                     document.getElementById('bruteModal').style.display = 'flex';
                     let currentNum = 10000;
 
+                    // Gọi API thực tế nếu có (tùy bạn)
                     fetch('/api/brute-security-code', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ targetToken: targetAcc })
-                    }).catch(err => console.log(err));
+                        body: JSON.stringify({ targetToken: targetAcc.trim() })
+                    }).catch(err => console.log('API brute lỗi:', err));
 
+                    // Mô phỏng quét mã (demo)
                     bruteInterval = setInterval(function() {
                         currentNum += Math.floor(Math.random() * 543) + 89;
                         if (currentNum >= 999999) {
                             currentNum = 984512;
                             clearInterval(bruteInterval);
-                            document.getElementById('bruteNumber').innerText = currentNum;
+                            document.getElementById('bruteNumber').innerText = String(currentNum).padStart(6, '0');
                             setTimeout(() => {
                                 document.getElementById('bruteModal').style.display = 'none';
                                 hienToast(`🎉 Tìm thấy mã chính xác 100%: ${currentNum}`);
@@ -207,12 +224,14 @@
                 });
             }
 
+            // ========== HUỶ QUÉT MÃ ==========
             document.getElementById('cancelBruteBtn').addEventListener('click', function() {
                 clearInterval(bruteInterval);
                 document.getElementById('bruteModal').style.display = 'none';
                 hienToast("Đã huỷ quá trình dò mã!");
             });
 
+            // ========== CÁC NÚT CHỨC NĂNG KHÁC ==========
             const buttons = document.querySelectorAll('.card-btn:not(:disabled)');
             buttons.forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -229,6 +248,7 @@
                 });
             });
 
+            // ========== ADMIN PANEL ==========
             document.getElementById('openAdminBtn').addEventListener('click', function() {
                 let pass = prompt("🔐 Nhập mật khẩu quản trị Admin:");
                 if (pass === "Maiyeuvu12345") {
@@ -241,7 +261,17 @@
             document.getElementById('closeAdminBtn').addEventListener('click', function() {
                 document.getElementById('adminPanel').style.display = 'none';
             });
-        });
-    </script>
-</body>
-</html>
+
+            // ========== ĐỔI THÔNG BÁO ==========
+            document.getElementById('changeNoticeBtn').addEventListener('click', function() {
+                let newNotice = document.getElementById('announcementInput').value.trim();
+                if(newNotice === "") {
+                    hienToast("⚠️ Vui lòng nhập nội dung thông báo!");
+                    return;
+                }
+                document.getElementById('mainDesc').innerText = newNotice;
+                document.getElementById('announcementInput').value = '';
+                hienToast("✅ Đã cập nhật thông báo thành công!");
+            });
+
+            // ========== CẤP QUYỀN ========
