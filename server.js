@@ -6,7 +6,7 @@ app.use(express.json());
 // Lưu trữ quyền của các tài khoản (Key: UID hoặc Token, Value: Gói PRO / PLUS / BOTH)
 let userPermissions = {};
 
-// Giao diện Web được tích hợp trực tiếp trên Server để chạy ổn định 100% không bị lỗi file
+// Giao diện Web đầy đủ toàn bộ tính năng tích hợp trực tiếp trên Server
 const htmlContent = `
 <!DOCTYPE html>
 <html lang="vi">
@@ -81,9 +81,17 @@ const htmlContent = `
         <button class="btn-check" onclick="checkToken()">Check Ngay</button>
     </div>
 
-    <div class="section-title">Bảo Mật & Tính Năng <span>2</span></div>
+    <!-- DANH MỤC TÍNH NĂNG ĐẦY ĐỦ -->
+    <div class="section-title">Bảo Mật & Quản Trị <span>4</span></div>
     <div class="card pro-feature locked" onclick="dungChucNang('Dò Mã Bảo Mật', 'BRUTE')"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực tự động</div></div><div class="arrow">›</div></div>
+    <div class="card pro-feature locked" onclick="dungChucNang('Vô Hiệu Hóa Token', 'PRO')"><div class="card-info"><div class="card-title">Vô Hiệu Hóa Token <span class="badge-pro">PRO</span></div><div class="card-desc">Hủy phiên đăng nhập từ xa của tài khoản</div></div><div class="arrow">›</div></div>
+    <div class="card plus-feature locked" onclick="dungChucNang('Đổi Mật Khẩu Nhanh', 'PLUS')"><div class="card-info"><div class="card-title">Đổi Mật Khẩu Nhanh <span class="badge-plus">PLUS</span></div><div class="card-desc">Thay đổi mật khẩu tài khoản trực tiếp qua hệ thống</div></div><div class="arrow">›</div></div>
     <div class="card" onclick="dungChucNang('Access Token → JWT Token', 'FREE')"><div class="card-info"><div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div><div class="card-desc">Chuyển đổi Access Token sang JWT Token</div></div><div class="arrow">›</div></div>
+
+    <div class="section-title">Công Cụ Phổ Biến <span>3</span></div>
+    <div class="card" onclick="dungChucNang('Kiểm Tra Trạng Thái UID', 'FREE')"><div class="card-info"><div class="card-title">Kiểm Tra Trạng Thái UID <span class="badge-free">FREE</span></div><div class="card-desc">Kiểm tra thông tin công khai tài khoản game</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Lọc Token Sống/Chết', 'FREE')"><div class="card-info"><div class="card-title">Lọc Token Sống/Chết <span class="badge-free">FREE</span></div><div class="card-desc">Kiểm tra độ hợp lệ hàng loạt của danh sách token</div></div><div class="arrow">›</div></div>
+    <div class="card" onclick="dungChucNang('Giải Mã OpenID', 'FREE')"><div class="card-info"><div class="card-title">Giải Mã OpenID <span class="badge-free">FREE</span></div><div class="card-desc">Lấy thông tin chi tiết từ chuỗi định danh OpenID</div></div><div class="arrow">›</div></div>
 
     <div id="bruteModal" class="custom-modal">
         <div class="modal-box">
@@ -154,10 +162,16 @@ const htmlContent = `
                 if (data.success) {
                     hasPro = data.hasPro;
                     hasPlus = data.hasPlus;
+                    
                     document.querySelectorAll('.pro-feature').forEach(el => {
                         if (hasPro) el.classList.remove('locked');
                         else el.classList.add('locked');
                     });
+                    document.querySelectorAll('.plus-feature').forEach(el => {
+                        if (hasPlus) el.classList.remove('locked');
+                        else el.classList.add('locked');
+                    });
+
                     document.getElementById('currentStatusBadge').innerText = data.package;
                     hienToast("✅ " + data.message + " (" + data.info + ")");
                 } else {
@@ -175,6 +189,10 @@ const htmlContent = `
             }
             if (loaiYeuCau === 'PRO' && !hasPro) {
                 hienToast("⚠️ Tính năng này yêu cầu quyền Gói PRO!");
+                return;
+            }
+            if (loaiYeuCau === 'PLUS' && !hasPlus) {
+                hienToast("⚠️ Tính năng này yêu cầu quyền Gói PLUS!");
                 return;
             }
             if (loaiYeuCau === 'BRUTE') {
@@ -237,7 +255,6 @@ const htmlContent = `
 </html>
 `;
 
-// Render trả trực tiếp giao diện khi người dùng truy cập trang chính
 app.get('/', (req, res) => {
     res.send(htmlContent);
 });
