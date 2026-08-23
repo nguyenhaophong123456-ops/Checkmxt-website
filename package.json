@@ -1,7 +1,7 @@
 {
-  "name": "checkmxt",
+  "name": "hihi-mxt-system",
   "version": "1.0.0",
-  "description": "",
+  "description": "He thong quan ly va tra cuu tai khoan",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
