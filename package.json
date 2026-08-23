@@ -1,7 +1,7 @@
 {
-  "name": "hihismxt-tool",
+  "name": "checkmxt",
   "version": "1.0.0",
-  "description": "Tool tra cuu va quan ly tai khoan",
+  "description": "Nền tảng công cụ hoàn chỉnh",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
