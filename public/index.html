@@ -17,9 +17,15 @@
         .section-title { font-size: 13px; font-weight: bold; color: #8b949e; text-align: left; margin: 20px 0 8px 5px; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
         .section-title span { font-size: 11px; background: #21262d; padding: 2px 8px; border-radius: 10px; color: #c9d1d9; }
         
-        /* Dùng thẻ button chuẩn 100% để không bao giờ bị liệt cảm ứng trên mobile */
-        .card-btn { width: 100%; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; cursor: pointer; color: #fff; }
-        .card-btn:active { background: #30363d; border-color: #a259ff; }
+        /* Style nút chung */
+        .card-btn { width: 100%; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 14px; margin-bottom: 10px; text-align: left; display: flex; align-items: center; justify-content: space-between; color: #fff; }
+        
+        /* Nút FREE sáng rõ, bấm mượt */
+        .card-btn:not(:disabled) { cursor: pointer; }
+        .card-btn:not(:disabled):active { background: #30363d; border-color: #a259ff; }
+
+        /* Nút PRO và PLUS bị làm mờ và khóa lại */
+        .card-btn:disabled { opacity: 0.4; cursor: not-allowed; background: #11141a; border-color: #21262d; }
 
         .card-info { flex: 1; pointer-events: none; text-align: left; }
         .card-title { font-size: 14px; font-weight: bold; color: #fff; margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
@@ -38,10 +44,6 @@
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #30363d; padding-bottom: 8px; }
         .btn-close { background: #da3633; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
         .admin-divider { border-top: 1px solid #30363d; margin: 15px 0; }
-
-        .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-box { background: #161b22; border: 1px solid #a259ff; padding: 20px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; }
-        .brute-code { font-size: 28px; font-weight: bold; color: #238636; margin: 15px 0; letter-spacing: 3px; font-family: monospace; }
 
         #toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #21262d; color: #fff; border: 1px solid #a259ff; padding: 12px 24px; border-radius: 25px; font-size: 14px; display: none; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.6); font-weight: bold; }
     </style>
@@ -86,47 +88,35 @@
         <button class="btn-check" id="checkTokenBtn">Check Ngay</button>
     </div>
 
-    <!-- DANH SÁCH CHỨC NĂNG (Dùng thẻ button thuần túy) -->
+    <!-- DANH SÁCH CHỨC NĂNG (PRO & PLUS bị mờ/disabled, FREE sáng rõ) -->
     <div class="section-title">Phổ Biến <span>2</span></div>
-    <button class="card-btn" data-name="Ban 7 Ngày" data-type="PRO"><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="Tiểu Sử Dài" data-type="PRO"><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Ban 7 Ngày" data-type="PRO" disabled><div class="card-info"><div class="card-title">Ban 7 Ngày <span class="badge-pro">PRO</span></div><div class="card-desc">Ban tài khoản đó trong vòng 7 ngày</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Tiểu Sử Dài" data-type="PRO" disabled><div class="card-info"><div class="card-title">Tiểu Sử Dài <span class="badge-pro">PRO</span></div><div class="card-desc">Đặt tiểu sử dài cho tài khoản cấp tốc</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Quản Lý Token <span>4</span></div>
-    <button class="card-btn" data-name="Vô Hiệu Hoá Access Token" data-type="PRO"><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="EAT → Access Token" data-type="PRO"><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="EAT → JWT Token" data-type="PRO"><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Vô Hiệu Hoá Access Token" data-type="PRO" disabled><div class="card-info"><div class="card-title">Vô Hiệu Hoá Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Vô hiệu hoá access token hiện tại ngay lập tức</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="EAT → Access Token" data-type="PRO" disabled><div class="card-info"><div class="card-title">EAT → Access Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT token sang Access Token</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="EAT → JWT Token" data-type="PRO" disabled><div class="card-info"><div class="card-title">EAT → JWT Token <span class="badge-pro">PRO</span></div><div class="card-desc">Chuyển đổi EAT Token sang JWT Token</div></div><div class="arrow">›</div></button>
     <button class="card-btn" data-name="Access Token → JWT Token" data-type="FREE"><div class="card-info"><div class="card-title">Access Token → JWT Token <span class="badge-free">FREE</span></div><div class="card-desc">Chuyển đổi Access Token sang JWT Token</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Quản Lý Email <span>4</span></div>
-    <button class="card-btn" data-name="Thêm Email Khôi Phục" data-type="PRO_EMAIL"><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="Huỷ Yêu Cầu Gắn Email" data-type="PRO"><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Thêm Email Khôi Phục" data-type="PRO_EMAIL" disabled><div class="card-info"><div class="card-title">Thêm Email Khôi Phục <span class="badge-pro">PRO</span></div><div class="card-desc">Thêm email khôi phục (Quy trình 3 bước tự động)</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Huỷ Yêu Cầu Gắn Email" data-type="PRO" disabled><div class="card-info"><div class="card-title">Huỷ Yêu Cầu Gắn Email <span class="badge-pro">PRO</span></div><div class="card-desc">Huỷ yêu cầu gắn email khôi phục đang chờ</div></div><div class="arrow">›</div></button>
     <button class="card-btn" data-name="Huỷ Liên Kết Email" data-type="FREE"><div class="card-info"><div class="card-title">Huỷ Liên Kết Email <span class="badge-free">FREE</span></div><div class="card-desc">Gỡ email liên kết khỏi tài khoản</div></div><div class="arrow">›</div></button>
     <button class="card-btn" data-name="Đổi Email Liên Kết" data-type="FREE"><div class="card-info"><div class="card-title">Đổi Email Liên Kết <span class="badge-free">FREE</span></div><div class="card-desc">Thay đổi email liên kết của bạn</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Bảo Mật Garena <span>2</span></div>
-    <button class="card-btn" data-name="Dò Mã Bảo Mật" data-type="BRUTE"><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="Ban Vĩnh Viễn" data-type="PRO"><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Dò Mã Bảo Mật" data-type="BRUTE" disabled><div class="card-info"><div class="card-title">Dò Mã Bảo Mật <span class="badge-pro">PRO</span></div><div class="card-desc">Dò mã bảo mật mail xác thực từ 000000 đến 999999</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Ban Vĩnh Viễn" data-type="PRO" disabled><div class="card-info"><div class="card-title">Ban Vĩnh Viễn <span class="badge-pro">PRO</span></div><div class="card-desc">Sử dụng login BotTCP để ban vĩnh viễn</div></div><div class="arrow">›</div></button>
 
     <div class="section-title">Tính Năng Plus & Pro <span>3</span></div>
-    <button class="card-btn" data-name="Spam Log" data-type="PRO"><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="Chặn Mail Xác Thực (OTP)" data-type="PLUS"><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn mã xác thực</div></div><div class="arrow">›</div></button>
-    <button class="card-btn" data-name="Đăng Xuất Mọi Thiết Bị" data-type="PLUS"><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></button>
-
-    <!-- Modal Dò Mã -->
-    <div id="bruteModal" class="custom-modal">
-        <div class="modal-box">
-            <div style="font-size: 15px; font-weight: bold; color: #a259ff; margin-bottom: 5px;">Đang dò mã bảo mật mail xác thực</div>
-            <div style="font-size: 11px; color: #8b949e;">Hệ thống đang quét từ 000000 đến 999999...</div>
-            <div class="brute-code" id="bruteNumber">000000</div>
-            <button class="btn-close" style="width: 100%; padding: 10px; font-size: 13px;" id="cancelBruteBtn">Huỷ Quét</button>
-        </div>
-    </div>
+    <button class="card-btn" data-name="Spam Log" data-type="PRO" disabled><div class="card-info"><div class="card-title">Spam Log <span class="badge-pro">PRO</span></div><div class="card-desc">Chạy ngầm Spam Log trong game</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Chặn Mail Xác Thực (OTP)" data-type="PLUS" disabled><div class="card-info"><div class="card-title">Chặn Mail Xác Thực (OTP) <span class="badge-plus">PLUS</span></div><div class="card-desc">Nhập gmail muốn chặn mã xác thực</div></div><div class="arrow">›</div></button>
+    <button class="card-btn" data-name="Đăng Xuất Mọi Thiết Bị" data-type="PLUS" disabled><div class="card-info"><div class="card-title">Đăng Xuất Mọi Thiết Bị <span class="badge-plus">PLUS</span></div><div class="card-desc">Đăng xuất toàn bộ thiết bị đang đăng nhập</div></div><div class="arrow">›</div></button>
 
     <div id="toast">Thông báo</div>
 
     <script>
-        let bruteInterval;
-
         function hienToast(msg) {
             let t = document.getElementById('toast');
             t.innerText = msg;
@@ -134,9 +124,7 @@
             setTimeout(() => { t.style.display = 'none'; }, 3000);
         }
 
-        // Gắn sự kiện an toàn bằng JavaScript thuần không sợ lỗi trình duyệt di động
         document.addEventListener("DOMContentLoaded", function() {
-            // Nút Admin
             document.getElementById('openAdminBtn').addEventListener('click', function() {
                 let pass = prompt("🔐 Nhập mật khẩu quản trị Admin:");
                 if (pass === "Maiyeuvu12345") {
@@ -198,96 +186,25 @@
                 }
             });
 
-            document.getElementById('cancelBruteBtn').addEventListener('click', function() {
-                clearInterval(bruteInterval);
-                document.getElementById('bruteModal').style.display = 'none';
-                hienToast("Đã huỷ quá trình dò mã!");
-            });
-
-            // Gắn sự kiện click cho toàn bộ các nút chức năng danh sách
-            const buttons = document.querySelectorAll('.card-btn');
+            // Gắn sự kiện click cho các nút không bị disable (FREE)
+            const buttons = document.querySelectorAll('.card-btn:not(:disabled)');
             buttons.forEach(btn => {
                 btn.addEventListener('click', function() {
                     let tenChucNang = this.getAttribute('data-name');
-                    let loaiYeuCau = this.getAttribute('data-type');
-                    xuLyChucNangClick(tenChucNang, loaiYeuCau);
+                    
+                    if (tenChucNang === 'Huỷ Liên Kết Email' || tenChucNang === 'Đổi Email Liên Kết') {
+                        let mail = prompt("Nhập email mới hoặc xác nhận thao tác:");
+                        if (!mail) return;
+                        hienToast("Đang xử lý liên kết email...");
+                        setTimeout(() => hienToast("✅ Thao tác email thành công!"), 2000);
+                        return;
+                    }
+
+                    hienToast("Đang xử lý " + tenChucNang + "...");
+                    setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
                 });
             });
         });
-
-        function xuLyChucNangClick(tenChucNang, loaiYeuCau) {
-            if (loaiYeuCau === 'BRUTE') {
-                chayDoMaBaoMat();
-                return;
-            }
-            if (loaiYeuCau === 'PRO_EMAIL') {
-                xuLyThemEmail3Buoc();
-                return;
-            }
-            if (tenChucNang === 'Chặn Mail Xác Thực (OTP)') {
-                xuLyChanOtp();
-                return;
-            }
-            if (tenChucNang === 'Ban 7 Ngày') {
-                let reason = prompt("Nhập lý do ban 7 ngày:", "Vi phạm quy tắc trò chơi");
-                if (!reason) return;
-                hienToast("Đang thực thi lệnh Ban 7 Ngày...");
-                setTimeout(() => hienToast("✅ Đã ban tài khoản thành công trong 7 ngày!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Tiểu Sử Dài') {
-                let bio = prompt("Nhập nội dung tiểu sử muốn thay đổi:", "HIHI MXT Pro Tools");
-                if (!bio) return;
-                hienToast("Đang cập nhật tiểu sử dài...");
-                setTimeout(() => hienToast("✅ Đã đổi tiểu sử thành công!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Ban Vĩnh Viễn') {
-                let confirmBan = confirm("⚠️ CẢNH BÁO: Bạn có chắc chắn muốn BAN VĨNH VIỄN tài khoản này qua BotTCP không?");
-                if (!confirmBan) return;
-                hienToast("Đang gửi lệnh Ban Vĩnh Viễn...");
-                setTimeout(() => hienToast("🚫 Đã thực hiện Ban Vĩnh Viễn thành công!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Vô Hiệu Hoá Access Token') {
-                hienToast("Đang vô hiệu hóa Access Token hiện tại...");
-                setTimeout(() => hienToast("✅ Đã vô hiệu hóa token thành công!"), 2000);
-                return;
-            }
-            if (tenChucNang.includes('→')) {
-                hienToast("Đang chuyển đổi định dạng token...");
-                setTimeout(() => hienToast("🎉 Chuyển đổi thành công token mới!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Huỷ Yêu Cầu Gắn Email') {
-                hienToast("Đang hủy yêu cầu gắn email đang chờ...");
-                setTimeout(() => hienToast("✅ Đã hủy yêu cầu gắn email thành công!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Huỷ Liên Kết Email' || tenChucNang === 'Đổi Email Liên Kết') {
-                let mail = prompt("Nhập email mới hoặc xác nhận thao tác:");
-                if (!mail) return;
-                hienToast("Đang xử lý liên kết email...");
-                setTimeout(() => hienToast("✅ Thao tác email thành công!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Spam Log') {
-                hienToast("Đang chạy ngầm Spam Log trong game...");
-                setTimeout(() => hienToast("✅ Đã kích hoạt tiến trình Spam Log!"), 2000);
-                return;
-            }
-            if (tenChucNang === 'Đăng Xuất Mọi Thiết Bị') {
-                let cf = confirm("Bạn có muốn đăng xuất toàn bộ thiết bị đang đăng nhập không?");
-                if (!cf) return;
-                hienToast("Đang gửi lệnh đăng xuất mọi thiết bị...");
-                setTimeout(() => hienToast("✅ Đã đăng xuất toàn bộ thiết bị thành công!"), 2000);
-                return;
-            }
-
-            hienToast("Đang xử lý " + tenChucNang + "...");
-            setTimeout(() => hienToast("✅ Thực thi thành công [" + tenChucNang + "]!"), 2000);
-        }
-
-        function xuLyThemEmail3Buoc() {
-            let emailMoi = prompt("[Bước 1/3] Nhập địa chỉ Gmail muốn gắn vào tài khoản:");
-            if (!emailMoi) ret
+    </script>
+</body>
+</html>
