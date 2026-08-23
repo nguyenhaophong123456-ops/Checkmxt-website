@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIHIMXT - Quản Lý Tài Khoản</title>
+    <style>
+        body {
+            background-color: #121019;
+            color: #ffffff;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #1e1b2e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        h2 { text-align: center; color: #a27b5c; }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #2a263d;
+            border: 1px solid #3f385c;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #7952e8, #9d7fe6);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 10px;
+            background: #161321;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #00ffcc;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>HIHIMXT TOOLS</h2>
+        <p style="font-size: 13px; color: #b1a9c4;">Nhập UID để tra cứu thông tin tài khoản:</p>
+        
+        <input type="text" id="uidInput" placeholder="Nhập UID(ID GAME)">
+        <button id="checkBtn">Check</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('checkBtn').addEventListener('click', async () => {
+            const uid = document.getElementById('uidInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            if(!uid) {
+                alert('Vui lòng nhập UID!');
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.innerText = 'Đang xử lý...';
+
+            try {
+                const response = await fetch('/api/check-uid', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: uid })
+                });
+                const data = await response.json();
+                resultDiv.innerText = data.message;
+            } catch (error) {
+                resultDiv.innerText = 'Lỗi kết nối tới server!';
+            }
+        });
+    </script>
+
+</body>
+</html>
