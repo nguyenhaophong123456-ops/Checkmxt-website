@@ -6,7 +6,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Bộ nhớ tạm thời lưu gói cước của các UID (Ví dụ: { "12345678": "PRO", "87654321": "PLUS" })
+// Bộ nhớ tạm thời lưu gói cước của các UID
 let userPermissions = {};
 
 // API kiểm tra trạng thái
@@ -36,12 +36,12 @@ app.post('/api/admin/set-permission', (req, res) => {
 
         if (packageType === 'RESET') {
             delete userPermissions[targetUser];
-            return.json({ success: true, message: `🔄 Đã thu hồi quyền, đưa tài khoản ${targetUser} về FREE!` });
+            return res.json({ success: true, message: `🔄 Đã thu hồi quyền, đưa tài khoản ${targetUser} về FREE!` });
         }
 
         // Lưu quyền vào server
         userPermissions[targetUser] = packageType;
-        return.json({ success: true, message: `✅ Đã cấp gói [${packageType}] cho tài khoản: ${targetUser}` });
+        return res.json({ success: true, message: `✅ Đã cấp gói [${packageType}] cho tài khoản: ${targetUser}` });
     } catch (error) {
         console.error("Lỗi server:", error);
         return res.status(500).json({ success: false, message: "❌ Lỗi hệ thống server nội bộ!" });
